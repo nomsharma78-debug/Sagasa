@@ -1,0 +1,56 @@
+.product-carousel-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.product-carousel-header {
+  /* Title margins handle the spacing */
+}
+
+.product-carousel-header .pdp-cross-sell-title {
+  /* Inherit margins from ProductDetail.css */
+}
+
+.carousel-track-container {
+  position: relative;
+}
+
+.carousel-control-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  background: var(--color-background);
+  color: var(--color-foreground);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: absolute;
+  top: 40%; /* Slightly above center since cards have text below */
+  transform: translateY(-50%);
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.carousel-control-btn.left-btn {
+  left: -22px;
+}
+
+.carousel-control-btn.right-btn {
+  right: -22px;
+}
+
+.carousel-control-btn:hover:not(.disabled) {
+  border-color: var(--color-foreground);
+  background: var(--color-foreground);
+  color: var(--color-background);
+}
+
+.carousel-control-btn.disabled {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Inherit the horizontal scroll logic from ProductDetail.css for the list itself */

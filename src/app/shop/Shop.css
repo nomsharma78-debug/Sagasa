@@ -1,0 +1,132 @@
+.shop-page {
+  min-height: 100vh;
+  padding-top: calc(var(--header-height) + 2rem);
+  padding-bottom: var(--spacing-xl);
+}
+
+/* Utilitarian Filter Bar */
+.catalog-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+@media (min-width: 768px) {
+  .catalog-toolbar {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+}
+
+.catalog-title-wrapper {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.catalog-title {
+  font-size: 2rem;
+  letter-spacing: -0.03em;
+}
+
+.catalog-count {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  font-family: var(--font-body);
+}
+
+.category-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.filter-btn {
+  background: none;
+  border: 1px solid transparent;
+  padding: 0.25rem 1rem;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-btn:hover {
+  color: var(--color-foreground);
+}
+
+.filter-btn.active {
+  background-color: var(--color-surface);
+  color: var(--color-foreground);
+}
+
+/* High-Density Catalog Grid */
+.catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2px; /* Very tight gap for catalog feel */
+  background-color: var(--color-border); /* The gap will show as the border color */
+  border: 1px solid var(--color-border);
+}
+
+@media (min-width: 992px) {
+  .catalog-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Make product cards fill their grid cells perfectly */
+.catalog-grid > .product-card {
+  background-color: var(--color-background);
+  padding: 0;
+  gap: 0;
+}
+
+.catalog-grid .product-info {
+  padding: 1rem;
+}
+
+/* Promotional Banner injected into Grid */
+.catalog-promo-banner {
+  grid-column: 1 / -1; /* Span all columns */
+  background-color: var(--color-foreground);
+  color: var(--color-background);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 4rem 2rem;
+  min-height: 400px;
+}
+
+.promo-content {
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.promo-content h2 {
+  font-size: 2.5rem;
+  color: var(--color-background);
+}
+
+.promo-content p {
+  font-size: 1.125rem;
+  opacity: 0.9;
+}
+
+.no-products {
+  text-align: center;
+  padding: 4rem 0;
+  color: var(--color-text-muted);
+  font-size: 1.125rem;
+}
