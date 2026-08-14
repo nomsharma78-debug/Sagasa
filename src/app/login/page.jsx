@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { ChevronLeft, CheckCircle } from 'lucide-react';
@@ -19,11 +19,46 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
+  const [otpError, setOtpError] = useState('');
+  const [showIncompleteError, setShowIncompleteError] = useState(false);
+  const [deliveryDetails, setDeliveryDetails] = useState({
+    fullName: '',
+    email: '',
+    address1: '',
+    address2: '',
+    city: '',
+    state: '',
+    pincode: ''
+  });
+
+  const handleDeliveryChange = (e) => {
+    setDeliveryDetails(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
+  };
+
+  const handleDeliverySubmit = (e) => {
+    e.preventDefault();
+    localStorage.setItem('isAuthenticated', 'true');
+    router.push('/profile');
+  };
+
+  useEffect(() => {
+    setShowIncompleteError(false);
+    
+    if (identifier && /^[6-9]/.test(identifier) && identifier.length < 10) {
+      const timer = setTimeout(() => {
+        setShowIncompleteError(true);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [identifier]);
 
   const getIdentifierError = () => {
     if (!identifier) return '';
     if (!/^[6-9]/.test(identifier)) return 'Enter a valid number';
-    if (identifier.length < 10) return 'Enter a valid mobile number';
+    if (identifier.length < 10 && showIncompleteError) return 'Enter your complete number';
     return '';
   };
   
@@ -32,14 +67,9 @@ const Login = () => {
 
   const handleIdentifierSubmit = (e) => {
     e.preventDefault();
-    if (!identifier) return;
+    if (!isIdentifierValid) return;
     
-    // Simulate API check
-    if (MOCK_REGISTERED_USERS.includes(identifier)) {
-      setStep('password');
-    } else {
-      setStep('otp');
-    }
+    setStep('otp');
   };
 
   const handlePasswordSubmit = (e) => {
@@ -62,11 +92,30 @@ const Login = () => {
     }
   };
 
+  const handleOtpKeyDown = (index, e) => {
+    if (e.key === 'Backspace' && !otp[index] && index > 0) {
+      const prevInput = document.getElementById(`otp-${index - 1}`);
+      if (prevInput) {
+        prevInput.focus();
+      }
+    }
+  };
+
   const handleOtpSubmit = (e) => {
     e.preventDefault();
     const otpValue = otp.join('');
     if (otpValue.length === 6) {
-      setStep('create_password');
+      if (otpValue === '123456') {
+        setOtpError('');
+        setStep('delivery_details');
+      } else {
+        setOtpError('Invalid OTP. Please try again.');
+        setOtp(['', '', '', '', '', '']);
+        const firstInput = document.getElementById('otp-0');
+        if (firstInput) firstInput.focus();
+      }
+    } else {
+      setOtpError('Please enter a complete 6-digit OTP.');
     }
   };
 
@@ -82,13 +131,13 @@ const Login = () => {
   };
 
   return (
-    <div className="grid grid-cols-1 min-h-[50vh] min-[900px]:grid-cols-[4fr_6fr] min-[900px]:h-[650px] min-[900px]:mt-0">
+    <div className="grid grid-cols-1 min-h-[50vh] min-[900px]:grid-cols-[4fr_6fr] min-[900px]:h-screen min-[900px]:pt-[var(--header-height)] min-[900px]:overflow-hidden">
       
       {/* LEFT SIDE: Image & Marketing */}
-      <div className="relative block bg-[var(--color-background)] overflow-hidden h-[350px] min-[900px]:mt-[20px] min-[900px]:ml-[20px] min-[900px]:rounded-[12px] min-[900px]:h-full">
+      <div className="relative block bg-[var(--color-background)] overflow-hidden h-[45vh] min-[900px]:my-[20px] min-[900px]:ml-[20px] min-[900px]:rounded-[12px] min-[900px]:h-[calc(100%-40px)]">
         <div className="relative w-full h-full">
           <img src="/login-couple.jpg" alt="Stylish couple in denim" className="w-full h-full object-cover object-[center_20%]" />
-          <div className="absolute bottom-0 left-0 right-0 py-[4rem] px-[3rem] bg-gradient-to-t from-[rgba(0,0,0,0.8)] to-[rgba(0,0,0,0)] text-white">
+          <div className="absolute bottom-0 left-0 right-0 pt-[4rem] pb-[60px] px-[3rem] bg-gradient-to-t from-[rgba(0,0,0,0.8)] to-[rgba(0,0,0,0)] text-white min-[900px]:pb-[4rem]">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -106,8 +155,8 @@ const Login = () => {
       </div>
 
       {/* RIGHT SIDE: Auth Flow */}
-      <div className="flex flex-col justify-center items-center py-[40px] px-[20px] bg-[var(--color-background)] relative -mt-[40px] rounded-t-[32px] rounded-b-none z-10 shadow-[0_-10px_40px_rgba(0,0,0,0.08)] min-[900px]:py-[20px] min-[900px]:px-[60px] min-[900px]:mt-0 min-[900px]:rounded-none min-[900px]:shadow-none">
-        <div className="w-full max-w-full">
+      <div className="flex flex-col items-center py-[40px] px-[20px] bg-[var(--color-background)] relative -mt-[40px] rounded-t-[32px] rounded-b-none z-10 shadow-[0_-10px_40px_rgba(0,0,0,0.08)] min-[900px]:py-[40px] min-[900px]:px-[60px] min-[900px]:mt-0 min-[900px]:rounded-none min-[900px]:shadow-none min-[900px]:overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+        <div className="w-full max-w-full m-auto">
           
           <motion.div 
             initial={{ opacity: 0, y: -10 }}
@@ -129,7 +178,7 @@ const Login = () => {
                 transition={{ duration: 0.3 }}
               >
                 <div className="mb-[2.5rem] text-center">
-                  <h1 className="text-[1rem] font-medium mb-[0.75rem] tracking-[-0.03em]">Log in/sign up</h1>
+                  <h1 className="text-[1.25rem] font-medium mb-[0.75rem] tracking-[-0.03em]">ʟᴏɢɪɴ/ꜱɪɢɴᴜᴘ</h1>
                 </div>
 
                 <form onSubmit={handleIdentifierSubmit} className="flex flex-col gap-[1.5rem] w-full" noValidate>
@@ -239,7 +288,7 @@ const Login = () => {
                 </div>
 
                 <form onSubmit={handleOtpSubmit} className="flex flex-col gap-[1.5rem] w-full">
-                  <div className="flex gap-[0.5rem] justify-between">
+                  <div className="flex gap-[0.5rem] justify-center">
                     {[0, 1, 2, 3, 4, 5].map((index) => (
                       <input
                         key={`otp-${index}`}
@@ -249,10 +298,12 @@ const Login = () => {
                         maxLength="1"
                         value={otp[index]}
                         onChange={(e) => handleOtpChange(index, e.target.value)}
+                        onKeyDown={(e) => handleOtpKeyDown(index, e)}
                         required
                       />
                     ))}
                   </div>
+                  {otpError && <p className="text-[#ef4444] text-[0.85rem] mt-[0.5rem] mb-[0.5rem] font-medium text-center animate-[fadeIn_0.2s_ease-in]">{otpError}</p>}
                   <div className="flex flex-col gap-[1rem] mt-[1rem]">
                     <Button type="submit" fullWidth>Verify Code</Button>
                   </div>
@@ -293,6 +344,58 @@ const Login = () => {
                   />
                   <div className="flex flex-col gap-[1rem] mt-[1rem]">
                     <Button type="submit" fullWidth>Create Account</Button>
+                  </div>
+                </form>
+              </motion.div>
+            )}
+
+            {/* STEP 3: DELIVERY DETAILS */}
+            {step === 'delivery_details' && (
+              <motion.div
+                key="step-delivery-details"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className="mb-[2.5rem] text-center">
+                  <h1 className="text-[1.5rem] font-medium mb-[0.5rem] tracking-[-0.02em]">Delivery Details</h1>
+                  <p className="text-[var(--color-text-muted)] text-[1rem]">Where should we send your orders?</p>
+                </div>
+
+                <form onSubmit={handleDeliverySubmit} className="flex flex-col gap-[2rem] w-full mt-[1rem]">
+                  
+                  {/* Contact Section */}
+                  <div className="flex flex-col gap-[1.5rem]">
+                    <div className="flex items-center gap-4">
+                      <div className="h-[1px] flex-1 bg-[var(--color-border)]"></div>
+                      <span className="text-[0.75rem] uppercase tracking-[0.1em] text-[var(--color-text-muted)] font-medium">Contact Info</span>
+                      <div className="h-[1px] flex-1 bg-[var(--color-border)]"></div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-[1.5rem]">
+                      <FormInput type="text" name="fullName" placeholder="Full Name" value={deliveryDetails.fullName} onChange={handleDeliveryChange} required />
+                      <FormInput type="email" name="email" placeholder="Email Address" value={deliveryDetails.email} onChange={handleDeliveryChange} required />
+                    </div>
+                  </div>
+
+                  {/* Shipping Section */}
+                  <div className="flex flex-col gap-[1.5rem]">
+                    <div className="flex items-center gap-4">
+                      <div className="h-[1px] flex-1 bg-[var(--color-border)]"></div>
+                      <span className="text-[0.75rem] uppercase tracking-[0.1em] text-[var(--color-text-muted)] font-medium">Shipping Address</span>
+                      <div className="h-[1px] flex-1 bg-[var(--color-border)]"></div>
+                    </div>
+                    <FormInput type="text" name="address1" placeholder="Address Line 1" value={deliveryDetails.address1} onChange={handleDeliveryChange} required />
+                    <FormInput type="text" name="address2" placeholder="Address Line 2 (Optional)" value={deliveryDetails.address2} onChange={handleDeliveryChange} />
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-[1.5rem]">
+                      <FormInput type="text" name="city" placeholder="City" value={deliveryDetails.city} onChange={handleDeliveryChange} required />
+                      <FormInput type="text" name="state" placeholder="State" value={deliveryDetails.state} onChange={handleDeliveryChange} required />
+                      <FormInput type="text" name="pincode" placeholder="PIN Code" value={deliveryDetails.pincode} onChange={handleDeliveryChange} required />
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-[1rem] mt-[0.5rem]">
+                    <Button type="submit" fullWidth>Save & Continue</Button>
                   </div>
                 </form>
               </motion.div>

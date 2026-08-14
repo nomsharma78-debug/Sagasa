@@ -22,9 +22,11 @@ const FormInput = ({
 
   return (
     <div className={`flex flex-col gap-2 mb-6 w-full ${isFocused ? 'focused' : ''} ${value ? 'has-value' : ''}`}>
-      <label className={`[font-family:var(--font-body)] text-sm font-medium transition-colors duration-200 ease-in-out ${isFocused ? 'text-[var(--color-accent)]' : 'text-[var(--color-foreground)]'}`} htmlFor={name}>
-        {label} {required && <span className="text-[#d32f2f]">*</span>}
-      </label>
+      {label && (
+        <label className={`[font-family:var(--font-body)] text-sm font-medium transition-colors duration-200 ease-in-out ${isFocused ? 'text-[var(--color-accent)]' : 'text-[var(--color-foreground)]'}`} htmlFor={name}>
+          {label} {required && <span className="text-[#d32f2f]">*</span>}
+        </label>
+      )}
       {isTextarea ? (
         <textarea
           id={name}
