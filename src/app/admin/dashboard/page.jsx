@@ -17,7 +17,6 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
   PieChart, Pie, Cell 
 } from 'recharts';
-import './Dashboard.css';
 
 // Mock Data for Charts
 const salesData = [
@@ -50,14 +49,14 @@ const truncateWords = (str, num = 3) => {
 
 export default function DashboardPage() {
   return (
-    <div className="admin-container dashboard-page">
+    <div className="mx-auto w-full max-w-[1600px] pb-8 font-[family-name:var(--font-body)]">
       {/* Header */}
-      <div className="dashboard-header">
-        <div className="dashboard-title-area">
-          <h1>Welcome back, Admin 👋</h1>
-          <p>Here's what's happening with your store today.</p>
+      <div className="flex justify-between items-start mb-8">
+        <div className="flex flex-col">
+          <h1 className="text-[1.5rem] font-bold text-[#111827] dark:text-[#F9FAFB] mb-1">Welcome back, Admin 👋</h1>
+          <p className="text-[0.85rem] text-[#6B7280] dark:text-[#9CA3AF]">Here's what's happening with your store today.</p>
         </div>
-        <button className="date-picker-btn">
+        <button className="flex items-center gap-2 bg-white dark:bg-[#111827] border border-[#E5E7EB] dark:border-[#374151] py-2 px-4 rounded-lg text-[0.85rem] text-[#4B5563] dark:text-[#D1D5DB] cursor-pointer shadow-[0_1px_2px_rgba(0,0,0,0.02)] dark:shadow-none">
           <Calendar size={16} />
           May 14 — May 20, 2025
           <span style={{ marginLeft: '0.25rem', fontSize: '10px' }}>▼</span>
@@ -65,17 +64,17 @@ export default function DashboardPage() {
       </div>
 
       {/* KPI Cards */}
-      <div className="dashboard-kpi-grid">
-        <div className="dash-kpi-card">
-          <div className="dash-kpi-header">
-            <div className="dash-kpi-icon purple"><ShoppingBag size={20} /></div>
-            <div className="dash-kpi-info">
-              <span className="dash-kpi-label">Total Revenue</span>
-              <span className="dash-kpi-value">₹2,45,680</span>
-              <span className="dash-kpi-trend up">↑ 15.6% from last week</span>
+      <div className="grid grid-cols-4 gap-6 mb-6">
+        <div className="bg-white dark:bg-[#111827] border border-[#E5E7EB] dark:border-[#1F2937] rounded-xl p-5 flex flex-col shadow-[0_2px_4px_rgba(0,0,0,0.02)] dark:shadow-none">
+          <div className="flex items-start gap-4 mb-4">
+            <div className="w-10 h-10 rounded-[10px] flex items-center justify-center shrink-0 bg-[#5D5FEF] text-white"><ShoppingBag size={20} /></div>
+            <div className="flex flex-col">
+              <span className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mb-[0.15rem]">Total Revenue</span>
+              <span className="text-[1.4rem] font-bold text-[#111827] dark:text-[#F9FAFB] leading-[1.1] mb-1">₹2,45,680</span>
+              <span className="text-[0.7rem] font-semibold text-[#10B981]">↑ 15.6% from last week</span>
             </div>
           </div>
-          <div className="dash-kpi-sparkline">
+          <div className="h-10 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={sparklineRev}>
                 <Line type="monotone" dataKey="v" stroke="#5D5FEF" strokeWidth={2} dot={false} isAnimationActive={false} />
@@ -84,16 +83,16 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="dash-kpi-card">
-          <div className="dash-kpi-header">
-            <div className="dash-kpi-icon green"><Package size={20} /></div>
-            <div className="dash-kpi-info">
-              <span className="dash-kpi-label">Total Orders</span>
-              <span className="dash-kpi-value">256</span>
-              <span className="dash-kpi-trend up">↑ 12.4% from last week</span>
+        <div className="bg-white dark:bg-[#111827] border border-[#E5E7EB] dark:border-[#1F2937] rounded-xl p-5 flex flex-col shadow-[0_2px_4px_rgba(0,0,0,0.02)] dark:shadow-none">
+          <div className="flex items-start gap-4 mb-4">
+            <div className="w-10 h-10 rounded-[10px] flex items-center justify-center shrink-0 bg-[#10B981] text-white"><Package size={20} /></div>
+            <div className="flex flex-col">
+              <span className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mb-[0.15rem]">Total Orders</span>
+              <span className="text-[1.4rem] font-bold text-[#111827] dark:text-[#F9FAFB] leading-[1.1] mb-1">256</span>
+              <span className="text-[0.7rem] font-semibold text-[#10B981]">↑ 12.4% from last week</span>
             </div>
           </div>
-          <div className="dash-kpi-sparkline">
+          <div className="h-10 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={sparklineOrd}>
                 <Line type="monotone" dataKey="v" stroke="#10B981" strokeWidth={2} dot={false} isAnimationActive={false} />
@@ -102,16 +101,16 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="dash-kpi-card">
-          <div className="dash-kpi-header">
-            <div className="dash-kpi-icon orange"><Users size={20} /></div>
-            <div className="dash-kpi-info">
-              <span className="dash-kpi-label">Total Customers</span>
-              <span className="dash-kpi-value">1,289</span>
-              <span className="dash-kpi-trend up">↑ 8.7% from last week</span>
+        <div className="bg-white dark:bg-[#111827] border border-[#E5E7EB] dark:border-[#1F2937] rounded-xl p-5 flex flex-col shadow-[0_2px_4px_rgba(0,0,0,0.02)] dark:shadow-none">
+          <div className="flex items-start gap-4 mb-4">
+            <div className="w-10 h-10 rounded-[10px] flex items-center justify-center shrink-0 bg-[#F59E0B] text-white"><Users size={20} /></div>
+            <div className="flex flex-col">
+              <span className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mb-[0.15rem]">Total Customers</span>
+              <span className="text-[1.4rem] font-bold text-[#111827] dark:text-[#F9FAFB] leading-[1.1] mb-1">1,289</span>
+              <span className="text-[0.7rem] font-semibold text-[#10B981]">↑ 8.7% from last week</span>
             </div>
           </div>
-          <div className="dash-kpi-sparkline">
+          <div className="h-10 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={sparklineCus}>
                 <Line type="monotone" dataKey="v" stroke="#F59E0B" strokeWidth={2} dot={false} isAnimationActive={false} />
@@ -120,16 +119,16 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="dash-kpi-card">
-          <div className="dash-kpi-header">
-            <div className="dash-kpi-icon purple"><Shirt size={20} /></div>
-            <div className="dash-kpi-info">
-              <span className="dash-kpi-label">Total Products</span>
-              <span className="dash-kpi-value">128</span>
-              <span className="dash-kpi-trend up">↑ 5.3% from last week</span>
+        <div className="bg-white dark:bg-[#111827] border border-[#E5E7EB] dark:border-[#1F2937] rounded-xl p-5 flex flex-col shadow-[0_2px_4px_rgba(0,0,0,0.02)] dark:shadow-none">
+          <div className="flex items-start gap-4 mb-4">
+            <div className="w-10 h-10 rounded-[10px] flex items-center justify-center shrink-0 bg-[#5D5FEF] text-white"><Shirt size={20} /></div>
+            <div className="flex flex-col">
+              <span className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mb-[0.15rem]">Total Products</span>
+              <span className="text-[1.4rem] font-bold text-[#111827] dark:text-[#F9FAFB] leading-[1.1] mb-1">128</span>
+              <span className="text-[0.7rem] font-semibold text-[#10B981]">↑ 5.3% from last week</span>
             </div>
           </div>
-          <div className="dash-kpi-sparkline">
+          <div className="h-10 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={sparklinePro}>
                 <Line type="monotone" dataKey="v" stroke="#5D5FEF" strokeWidth={2} dot={false} isAnimationActive={false} />
@@ -140,16 +139,16 @@ export default function DashboardPage() {
       </div>
 
       {/* Main Middle Grid */}
-      <div className="dashboard-main-grid">
+      <div className="grid grid-cols-[1.8fr_1.1fr_1.1fr] gap-6 mb-6">
         {/* Sales Overview Chart */}
-        <div className="dash-widget">
-          <div className="widget-header">
-            <div className="widget-title">Sales Overview <Info size={14} color="#9CA3AF" /></div>
-            <select className="widget-select">
+        <div className="bg-white dark:bg-[#111827] border border-[#E5E7EB] dark:border-[#1F2937] rounded-xl p-6 shadow-[0_2px_4px_rgba(0,0,0,0.02)] dark:shadow-none flex flex-col">
+          <div className="flex justify-between items-center mb-6">
+            <div className="text-[0.95rem] font-bold text-[#111827] dark:text-[#F9FAFB] flex items-center gap-2">Sales Overview <Info size={14} color="#9CA3AF" /></div>
+            <select className="border border-[#E5E7EB] dark:border-[#374151] rounded-md py-1 px-2 text-xs text-[#4B5563] dark:text-[#D1D5DB] bg-white dark:bg-[#1F2937] outline-none">
               <option>This Week</option>
             </select>
           </div>
-          <div className="chart-container">
+          <div className="flex-1 min-h-[250px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={salesData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
@@ -166,128 +165,128 @@ export default function DashboardPage() {
         </div>
 
         {/* Top Selling Products */}
-        <div className="dash-widget">
-          <div className="widget-header">
-            <div className="widget-title">Top Selling Products</div>
-            <Link href="/admin/products" className="widget-action">View All</Link>
+        <div className="bg-white dark:bg-[#111827] border border-[#E5E7EB] dark:border-[#1F2937] rounded-xl p-6 shadow-[0_2px_4px_rgba(0,0,0,0.02)] dark:shadow-none flex flex-col">
+          <div className="flex justify-between items-center mb-6">
+            <div className="text-[0.95rem] font-bold text-[#111827] dark:text-[#F9FAFB] flex items-center gap-2">Top Selling Products</div>
+            <Link href="/admin/products" className="text-xs text-[#5D5FEF] font-semibold no-underline">View All</Link>
           </div>
-          <div className="widget-list">
-            <div className="list-item">
-              <div className="list-item-left">
-                <img src="/product/1.png" className="list-item-image" alt="Product" />
-                <div className="list-item-info">
-                  <span className="list-item-title">{truncateWords('SAGASA Oversized Hoodie')}</span>
-                  <span className="list-item-subtitle">Black / L</span>
+          <div className="flex flex-col gap-5">
+            <div className="flex justify-between items-center gap-2">
+              <div className="flex items-center gap-3 min-w-0 flex-1">
+                <img src="/product/1.png" className="w-9 h-9 rounded-lg object-cover bg-[#F3F4F6] dark:bg-[#1F2937] shrink-0" alt="Product" />
+                <div className="flex flex-col min-w-0 flex-1">
+                  <span className="text-[0.8rem] font-semibold text-[#111827] dark:text-[#F9FAFB] mb-[0.1rem] whitespace-nowrap overflow-hidden text-ellipsis">{truncateWords('SAGASA Oversized Hoodie')}</span>
+                  <span className="text-[0.7rem] text-[#6B7280] dark:text-[#9CA3AF] whitespace-nowrap overflow-hidden text-ellipsis">Black / L</span>
                 </div>
               </div>
-              <div className="list-item-right">
-                <span className="list-item-value">₹48,560</span>
-                <span className="list-item-subvalue">152 Sold</span>
+              <div className="flex flex-col items-end shrink-0">
+                <span className="text-[0.85rem] font-bold text-[#111827] dark:text-[#F9FAFB]">₹48,560</span>
+                <span className="text-[0.7rem] text-[#6B7280] dark:text-[#9CA3AF]">152 Sold</span>
               </div>
             </div>
-            <div className="list-item">
-              <div className="list-item-left">
-                <img src="/product/2.png" className="list-item-image" alt="Product" />
-                <div className="list-item-info">
-                  <span className="list-item-title">{truncateWords('SAGASA Minimal T-Shirt')}</span>
-                  <span className="list-item-subtitle">White / M</span>
+            <div className="flex justify-between items-center gap-2">
+              <div className="flex items-center gap-3 min-w-0 flex-1">
+                <img src="/product/2.png" className="w-9 h-9 rounded-lg object-cover bg-[#F3F4F6] dark:bg-[#1F2937] shrink-0" alt="Product" />
+                <div className="flex flex-col min-w-0 flex-1">
+                  <span className="text-[0.8rem] font-semibold text-[#111827] dark:text-[#F9FAFB] mb-[0.1rem] whitespace-nowrap overflow-hidden text-ellipsis">{truncateWords('SAGASA Minimal T-Shirt')}</span>
+                  <span className="text-[0.7rem] text-[#6B7280] dark:text-[#9CA3AF] whitespace-nowrap overflow-hidden text-ellipsis">White / M</span>
                 </div>
               </div>
-              <div className="list-item-right">
-                <span className="list-item-value">₹32,450</span>
-                <span className="list-item-subvalue">108 Sold</span>
+              <div className="flex flex-col items-end shrink-0">
+                <span className="text-[0.85rem] font-bold text-[#111827] dark:text-[#F9FAFB]">₹32,450</span>
+                <span className="text-[0.7rem] text-[#6B7280] dark:text-[#9CA3AF]">108 Sold</span>
               </div>
             </div>
-            <div className="list-item">
-              <div className="list-item-left">
-                <img src="/product/3.png" className="list-item-image" alt="Product" />
-                <div className="list-item-info">
-                  <span className="list-item-title">{truncateWords('SAGASA Cargo Pants')}</span>
-                  <span className="list-item-subtitle">Olive / 32</span>
+            <div className="flex justify-between items-center gap-2">
+              <div className="flex items-center gap-3 min-w-0 flex-1">
+                <img src="/product/3.png" className="w-9 h-9 rounded-lg object-cover bg-[#F3F4F6] dark:bg-[#1F2937] shrink-0" alt="Product" />
+                <div className="flex flex-col min-w-0 flex-1">
+                  <span className="text-[0.8rem] font-semibold text-[#111827] dark:text-[#F9FAFB] mb-[0.1rem] whitespace-nowrap overflow-hidden text-ellipsis">{truncateWords('SAGASA Cargo Pants')}</span>
+                  <span className="text-[0.7rem] text-[#6B7280] dark:text-[#9CA3AF] whitespace-nowrap overflow-hidden text-ellipsis">Olive / 32</span>
                 </div>
               </div>
-              <div className="list-item-right">
-                <span className="list-item-value">₹28,990</span>
-                <span className="list-item-subvalue">76 Sold</span>
+              <div className="flex flex-col items-end shrink-0">
+                <span className="text-[0.85rem] font-bold text-[#111827] dark:text-[#F9FAFB]">₹28,990</span>
+                <span className="text-[0.7rem] text-[#6B7280] dark:text-[#9CA3AF]">76 Sold</span>
               </div>
             </div>
-            <div className="list-item">
-              <div className="list-item-left">
-                <img src="/product/1.png" className="list-item-image" alt="Product" />
-                <div className="list-item-info">
-                  <span className="list-item-title">{truncateWords('SAGASA Denim Jacket')}</span>
-                  <span className="list-item-subtitle">Blue / M</span>
+            <div className="flex justify-between items-center gap-2">
+              <div className="flex items-center gap-3 min-w-0 flex-1">
+                <img src="/product/1.png" className="w-9 h-9 rounded-lg object-cover bg-[#F3F4F6] dark:bg-[#1F2937] shrink-0" alt="Product" />
+                <div className="flex flex-col min-w-0 flex-1">
+                  <span className="text-[0.8rem] font-semibold text-[#111827] dark:text-[#F9FAFB] mb-[0.1rem] whitespace-nowrap overflow-hidden text-ellipsis">{truncateWords('SAGASA Denim Jacket')}</span>
+                  <span className="text-[0.7rem] text-[#6B7280] dark:text-[#9CA3AF] whitespace-nowrap overflow-hidden text-ellipsis">Blue / M</span>
                 </div>
               </div>
-              <div className="list-item-right">
-                <span className="list-item-value">₹25,670</span>
-                <span className="list-item-subvalue">64 Sold</span>
+              <div className="flex flex-col items-end shrink-0">
+                <span className="text-[0.85rem] font-bold text-[#111827] dark:text-[#F9FAFB]">₹25,670</span>
+                <span className="text-[0.7rem] text-[#6B7280] dark:text-[#9CA3AF]">64 Sold</span>
               </div>
             </div>
           </div>
         </div>
 
         {/* Recent Orders */}
-        <div className="dash-widget">
-          <div className="widget-header">
-            <div className="widget-title">Recent Orders</div>
-            <Link href="/admin/orders" className="widget-action">View All</Link>
+        <div className="bg-white dark:bg-[#111827] border border-[#E5E7EB] dark:border-[#1F2937] rounded-xl p-6 shadow-[0_2px_4px_rgba(0,0,0,0.02)] dark:shadow-none flex flex-col">
+          <div className="flex justify-between items-center mb-6">
+            <div className="text-[0.95rem] font-bold text-[#111827] dark:text-[#F9FAFB] flex items-center gap-2">Recent Orders</div>
+            <Link href="/admin/orders" className="text-xs text-[#5D5FEF] font-semibold no-underline">View All</Link>
           </div>
-          <div className="widget-list">
-            <div className="list-item">
-              <div className="list-item-left">
-                <div className="list-item-avatar">RS</div>
-                <div className="list-item-info">
-                  <span className="list-item-title">#SG2548</span>
-                  <span className="list-item-subtitle">Rohit Sharma</span>
+          <div className="flex flex-col gap-5">
+            <div className="flex justify-between items-center gap-2">
+              <div className="flex items-center gap-3 min-w-0 flex-1">
+                <div className="w-9 h-9 rounded-full bg-[#F4F0FF] dark:bg-[rgba(93,95,239,0.15)] text-[#5D5FEF] flex items-center justify-center text-[0.8rem] font-semibold shrink-0">RS</div>
+                <div className="flex flex-col min-w-0 flex-1">
+                  <span className="text-[0.8rem] font-semibold text-[#111827] dark:text-[#F9FAFB] mb-[0.1rem] whitespace-nowrap overflow-hidden text-ellipsis">#SG2548</span>
+                  <span className="text-[0.7rem] text-[#6B7280] dark:text-[#9CA3AF] whitespace-nowrap overflow-hidden text-ellipsis">Rohit Sharma</span>
                 </div>
               </div>
-              <span className="status-pill paid">Paid</span>
-              <div className="list-item-right">
-                <span className="list-item-value">₹2,299</span>
-                <span className="list-item-subvalue">2m ago</span>
+              <span className="text-[0.65rem] py-[0.15rem] px-2 rounded-xl font-semibold shrink-0 bg-[#D1FAE5] text-[#059669] dark:bg-[rgba(16,185,129,0.15)] dark:text-[#6EE7B7]">Paid</span>
+              <div className="flex flex-col items-end shrink-0">
+                <span className="text-[0.85rem] font-bold text-[#111827] dark:text-[#F9FAFB]">₹2,299</span>
+                <span className="text-[0.7rem] text-[#6B7280] dark:text-[#9CA3AF]">2m ago</span>
               </div>
             </div>
-            <div className="list-item">
-              <div className="list-item-left">
-                <div className="list-item-avatar" style={{backgroundColor: '#EFF6FF', color: '#3B82F6'}}>AS</div>
-                <div className="list-item-info">
-                  <span className="list-item-title">#SG2547</span>
-                  <span className="list-item-subtitle">Ananya Singh</span>
+            <div className="flex justify-between items-center gap-2">
+              <div className="flex items-center gap-3 min-w-0 flex-1">
+                <div className="w-9 h-9 rounded-full bg-[#F4F0FF] dark:bg-[rgba(93,95,239,0.15)] text-[#5D5FEF] flex items-center justify-center text-[0.8rem] font-semibold shrink-0" style={{backgroundColor: '#EFF6FF', color: '#3B82F6'}}>AS</div>
+                <div className="flex flex-col min-w-0 flex-1">
+                  <span className="text-[0.8rem] font-semibold text-[#111827] dark:text-[#F9FAFB] mb-[0.1rem] whitespace-nowrap overflow-hidden text-ellipsis">#SG2547</span>
+                  <span className="text-[0.7rem] text-[#6B7280] dark:text-[#9CA3AF] whitespace-nowrap overflow-hidden text-ellipsis">Ananya Singh</span>
                 </div>
               </div>
-              <span className="status-pill paid">Paid</span>
-              <div className="list-item-right">
-                <span className="list-item-value">₹1,299</span>
-                <span className="list-item-subvalue">10m ago</span>
+              <span className="text-[0.65rem] py-[0.15rem] px-2 rounded-xl font-semibold shrink-0 bg-[#D1FAE5] text-[#059669] dark:bg-[rgba(16,185,129,0.15)] dark:text-[#6EE7B7]">Paid</span>
+              <div className="flex flex-col items-end shrink-0">
+                <span className="text-[0.85rem] font-bold text-[#111827] dark:text-[#F9FAFB]">₹1,299</span>
+                <span className="text-[0.7rem] text-[#6B7280] dark:text-[#9CA3AF]">10m ago</span>
               </div>
             </div>
-            <div className="list-item">
-              <div className="list-item-left">
-                <div className="list-item-avatar" style={{backgroundColor: '#FEF2F2', color: '#EF4444'}}>KV</div>
-                <div className="list-item-info">
-                  <span className="list-item-title">#SG2546</span>
-                  <span className="list-item-subtitle">Karan Verma</span>
+            <div className="flex justify-between items-center gap-2">
+              <div className="flex items-center gap-3 min-w-0 flex-1">
+                <div className="w-9 h-9 rounded-full bg-[#F4F0FF] dark:bg-[rgba(93,95,239,0.15)] text-[#5D5FEF] flex items-center justify-center text-[0.8rem] font-semibold shrink-0" style={{backgroundColor: '#FEF2F2', color: '#EF4444'}}>KV</div>
+                <div className="flex flex-col min-w-0 flex-1">
+                  <span className="text-[0.8rem] font-semibold text-[#111827] dark:text-[#F9FAFB] mb-[0.1rem] whitespace-nowrap overflow-hidden text-ellipsis">#SG2546</span>
+                  <span className="text-[0.7rem] text-[#6B7280] dark:text-[#9CA3AF] whitespace-nowrap overflow-hidden text-ellipsis">Karan Verma</span>
                 </div>
               </div>
-              <span className="status-pill pending">Pending</span>
-              <div className="list-item-right">
-                <span className="list-item-value">₹1,899</span>
-                <span className="list-item-subvalue">25m ago</span>
+              <span className="text-[0.65rem] py-[0.15rem] px-2 rounded-xl font-semibold shrink-0 bg-[#FEF3C7] text-[#D97706] dark:bg-[rgba(245,158,11,0.15)] dark:text-[#FCD34D]">Pending</span>
+              <div className="flex flex-col items-end shrink-0">
+                <span className="text-[0.85rem] font-bold text-[#111827] dark:text-[#F9FAFB]">₹1,899</span>
+                <span className="text-[0.7rem] text-[#6B7280] dark:text-[#9CA3AF]">25m ago</span>
               </div>
             </div>
-            <div className="list-item">
-              <div className="list-item-left">
-                <div className="list-item-avatar" style={{backgroundColor: '#F0FDF4', color: '#10B981'}}>NP</div>
-                <div className="list-item-info">
-                  <span className="list-item-title">#SG2545</span>
-                  <span className="list-item-subtitle">Neha Patel</span>
+            <div className="flex justify-between items-center gap-2">
+              <div className="flex items-center gap-3 min-w-0 flex-1">
+                <div className="w-9 h-9 rounded-full bg-[#F4F0FF] dark:bg-[rgba(93,95,239,0.15)] text-[#5D5FEF] flex items-center justify-center text-[0.8rem] font-semibold shrink-0" style={{backgroundColor: '#F0FDF4', color: '#10B981'}}>NP</div>
+                <div className="flex flex-col min-w-0 flex-1">
+                  <span className="text-[0.8rem] font-semibold text-[#111827] dark:text-[#F9FAFB] mb-[0.1rem] whitespace-nowrap overflow-hidden text-ellipsis">#SG2545</span>
+                  <span className="text-[0.7rem] text-[#6B7280] dark:text-[#9CA3AF] whitespace-nowrap overflow-hidden text-ellipsis">Neha Patel</span>
                 </div>
               </div>
-              <span className="status-pill paid">Paid</span>
-              <div className="list-item-right">
-                <span className="list-item-value">₹2,999</span>
-                <span className="list-item-subvalue">1h ago</span>
+              <span className="text-[0.65rem] py-[0.15rem] px-2 rounded-xl font-semibold shrink-0 bg-[#D1FAE5] text-[#059669] dark:bg-[rgba(16,185,129,0.15)] dark:text-[#6EE7B7]">Paid</span>
+              <div className="flex flex-col items-end shrink-0">
+                <span className="text-[0.85rem] font-bold text-[#111827] dark:text-[#F9FAFB]">₹2,999</span>
+                <span className="text-[0.7rem] text-[#6B7280] dark:text-[#9CA3AF]">1h ago</span>
               </div>
             </div>
           </div>
@@ -295,12 +294,12 @@ export default function DashboardPage() {
       </div>
 
       {/* Bottom Grid */}
-      <div className="dashboard-bottom-grid">
+      <div className="grid grid-cols-[1.5fr_1.5fr_1fr] gap-6">
         {/* Orders Overview */}
-        <div className="dash-widget">
-          <div className="widget-header">
-            <div className="widget-title">Orders Overview</div>
-            <select className="widget-select">
+        <div className="bg-white dark:bg-[#111827] border border-[#E5E7EB] dark:border-[#1F2937] rounded-xl p-6 shadow-[0_2px_4px_rgba(0,0,0,0.02)] dark:shadow-none flex flex-col">
+          <div className="flex justify-between items-center mb-6">
+            <div className="text-[0.95rem] font-bold text-[#111827] dark:text-[#F9FAFB] flex items-center gap-2">Orders Overview</div>
+            <select className="border border-[#E5E7EB] dark:border-[#374151] rounded-md py-1 px-2 text-xs text-[#4B5563] dark:text-[#D1D5DB] bg-white dark:bg-[#1F2937] outline-none">
               <option>This Week</option>
             </select>
           </div>
@@ -325,20 +324,20 @@ export default function DashboardPage() {
                 </PieChart>
               </ResponsiveContainer>
               <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
-                <div className="donut-total-val">256</div>
-                <div className="donut-total-label">Total Orders</div>
+                <div className="text-xl font-bold text-[#111827] dark:text-[#F9FAFB]">256</div>
+                <div className="text-[0.65rem] text-[#6B7280] dark:text-[#9CA3AF]">Total Orders</div>
               </div>
             </div>
             
-            <div className="donut-legend" style={{ width: '40%' }}>
+            <div className="flex flex-col gap-3 -mt-8" style={{ width: '40%' }}>
               {orderData.map((item, idx) => (
-                <div className="legend-item" key={idx}>
-                  <div className="legend-label">
-                    <span className="legend-dot" style={{ backgroundColor: item.color }}></span>
+                <div className="flex items-center justify-between text-xs" key={idx}>
+                  <div className="flex items-center gap-2 text-[#4B5563] dark:text-[#9CA3AF] w-[80px]">
+                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: item.color }}></span>
                     {item.name}
                   </div>
-                  <div className="legend-value">{item.value}</div>
-                  <div className="legend-percent">({Math.round((item.value/256)*100)}%)</div>
+                  <div className="font-bold text-[#111827] dark:text-[#F9FAFB]">{item.value}</div>
+                  <div className="text-[#9CA3AF]">({Math.round((item.value/256)*100)}%)</div>
                 </div>
               ))}
             </div>
@@ -346,110 +345,110 @@ export default function DashboardPage() {
         </div>
 
         {/* Store Performance */}
-        <div className="dash-widget">
-          <div className="widget-header">
-            <div className="widget-title">Store Performance</div>
-            <select className="widget-select">
+        <div className="bg-white dark:bg-[#111827] border border-[#E5E7EB] dark:border-[#1F2937] rounded-xl p-6 shadow-[0_2px_4px_rgba(0,0,0,0.02)] dark:shadow-none flex flex-col">
+          <div className="flex justify-between items-center mb-6">
+            <div className="text-[0.95rem] font-bold text-[#111827] dark:text-[#F9FAFB] flex items-center gap-2">Store Performance</div>
+            <select className="border border-[#E5E7EB] dark:border-[#374151] rounded-md py-1 px-2 text-xs text-[#4B5563] dark:text-[#D1D5DB] bg-white dark:bg-[#1F2937] outline-none">
               <option>This Week</option>
             </select>
           </div>
-          <div className="widget-list" style={{ gap: '1.5rem', marginTop: '0.5rem' }}>
-            <div className="perf-row">
-              <div className="list-item-left">
-                <div className="perf-icon"><TrendingUp size={16} /></div>
-                <div className="list-item-info">
-                  <span className="list-item-title">Conversion Rate</span>
-                  <span className="list-item-value">2.43%</span>
+          <div className="flex flex-col gap-5" style={{ gap: '1.5rem', marginTop: '0.5rem' }}>
+            <div className="grid grid-cols-[1fr_1fr_60px] items-center gap-4">
+              <div className="flex items-center gap-3 min-w-0 flex-1">
+                <div className="w-8 h-8 rounded-lg bg-[#F8F7FF] dark:bg-[rgba(93,95,239,0.15)] text-[#5D5FEF] flex items-center justify-center"><TrendingUp size={16} /></div>
+                <div className="flex flex-col min-w-0 flex-1">
+                  <span className="text-[0.8rem] font-semibold text-[#111827] dark:text-[#F9FAFB] mb-[0.1rem] whitespace-nowrap overflow-hidden text-ellipsis">Conversion Rate</span>
+                  <span className="text-[0.85rem] font-bold text-[#111827] dark:text-[#F9FAFB]">2.43%</span>
                 </div>
               </div>
-              <div className="dash-kpi-sparkline" style={{ height: '30px' }}>
+              <div className="h-10 w-full" style={{ height: '30px' }}>
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={sparklineRev}><Line type="monotone" dataKey="v" stroke="#5D5FEF" strokeWidth={2} dot={false} /></LineChart>
                 </ResponsiveContainer>
               </div>
-              <div className="dash-kpi-trend up" style={{ textAlign: 'right' }}>↑ 6.4%</div>
+              <div className="text-[0.7rem] font-semibold text-[#10B981]" style={{ textAlign: 'right' }}>↑ 6.4%</div>
             </div>
 
-            <div className="perf-row">
-              <div className="list-item-left">
-                <div className="perf-icon" style={{backgroundColor: '#F0FDF4', color: '#10B981'}}><ShoppingBag size={16} /></div>
-                <div className="list-item-info">
-                  <span className="list-item-title">Avg Order Value</span>
-                  <span className="list-item-value">₹1,897</span>
+            <div className="grid grid-cols-[1fr_1fr_60px] items-center gap-4">
+              <div className="flex items-center gap-3 min-w-0 flex-1">
+                <div className="w-8 h-8 rounded-lg bg-[#F8F7FF] dark:bg-[rgba(93,95,239,0.15)] text-[#5D5FEF] flex items-center justify-center" style={{backgroundColor: '#F0FDF4', color: '#10B981'}}><ShoppingBag size={16} /></div>
+                <div className="flex flex-col min-w-0 flex-1">
+                  <span className="text-[0.8rem] font-semibold text-[#111827] dark:text-[#F9FAFB] mb-[0.1rem] whitespace-nowrap overflow-hidden text-ellipsis">Avg Order Value</span>
+                  <span className="text-[0.85rem] font-bold text-[#111827] dark:text-[#F9FAFB]">₹1,897</span>
                 </div>
               </div>
-              <div className="dash-kpi-sparkline" style={{ height: '30px' }}>
+              <div className="h-10 w-full" style={{ height: '30px' }}>
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={sparklineOrd}><Line type="monotone" dataKey="v" stroke="#10B981" strokeWidth={2} dot={false} /></LineChart>
                 </ResponsiveContainer>
               </div>
-              <div className="dash-kpi-trend up" style={{ textAlign: 'right' }}>↑ 8.1%</div>
+              <div className="text-[0.7rem] font-semibold text-[#10B981]" style={{ textAlign: 'right' }}>↑ 8.1%</div>
             </div>
 
-            <div className="perf-row">
-              <div className="list-item-left">
-                <div className="perf-icon" style={{backgroundColor: '#FEF2F2', color: '#EF4444'}}><RotateCcw size={16} /></div>
-                <div className="list-item-info">
-                  <span className="list-item-title">Return Rate</span>
-                  <span className="list-item-value">1.32%</span>
+            <div className="grid grid-cols-[1fr_1fr_60px] items-center gap-4">
+              <div className="flex items-center gap-3 min-w-0 flex-1">
+                <div className="w-8 h-8 rounded-lg bg-[#F8F7FF] dark:bg-[rgba(93,95,239,0.15)] text-[#5D5FEF] flex items-center justify-center" style={{backgroundColor: '#FEF2F2', color: '#EF4444'}}><RotateCcw size={16} /></div>
+                <div className="flex flex-col min-w-0 flex-1">
+                  <span className="text-[0.8rem] font-semibold text-[#111827] dark:text-[#F9FAFB] mb-[0.1rem] whitespace-nowrap overflow-hidden text-ellipsis">Return Rate</span>
+                  <span className="text-[0.85rem] font-bold text-[#111827] dark:text-[#F9FAFB]">1.32%</span>
                 </div>
               </div>
-              <div className="dash-kpi-sparkline" style={{ height: '30px' }}>
+              <div className="h-10 w-full" style={{ height: '30px' }}>
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={sparklineOrd}><Line type="monotone" dataKey="v" stroke="#EF4444" strokeWidth={2} dot={false} /></LineChart>
                 </ResponsiveContainer>
               </div>
-              <div className="dash-kpi-trend down" style={{ textAlign: 'right' }}>↓ 1.1%</div>
+              <div className="text-[0.7rem] font-semibold text-[#DC2626]" style={{ textAlign: 'right' }}>↓ 1.1%</div>
             </div>
           </div>
         </div>
 
         {/* Low Stock Alerts */}
-        <div className="dash-widget">
-          <div className="widget-header">
-            <div className="widget-title">Low Stock Alerts</div>
-            <Link href="/admin/inventory" className="widget-action">View All</Link>
+        <div className="bg-white dark:bg-[#111827] border border-[#E5E7EB] dark:border-[#1F2937] rounded-xl p-6 shadow-[0_2px_4px_rgba(0,0,0,0.02)] dark:shadow-none flex flex-col">
+          <div className="flex justify-between items-center mb-6">
+            <div className="text-[0.95rem] font-bold text-[#111827] dark:text-[#F9FAFB] flex items-center gap-2">Low Stock Alerts</div>
+            <Link href="/admin/inventory" className="text-xs text-[#5D5FEF] font-semibold no-underline">View All</Link>
           </div>
-          <div className="widget-list">
-            <div className="list-item">
-              <div className="list-item-left">
-                <img src="/product/3.png" className="list-item-image" alt="Product" />
-                <div className="list-item-info">
-                  <span className="list-item-title">{truncateWords('SAGASA Cargo Pants')}</span>
-                  <span className="list-item-subtitle">Black / 32</span>
+          <div className="flex flex-col gap-5">
+            <div className="flex justify-between items-center gap-2">
+              <div className="flex items-center gap-3 min-w-0 flex-1">
+                <img src="/product/3.png" className="w-9 h-9 rounded-lg object-cover bg-[#F3F4F6] dark:bg-[#1F2937] shrink-0" alt="Product" />
+                <div className="flex flex-col min-w-0 flex-1">
+                  <span className="text-[0.8rem] font-semibold text-[#111827] dark:text-[#F9FAFB] mb-[0.1rem] whitespace-nowrap overflow-hidden text-ellipsis">{truncateWords('SAGASA Cargo Pants')}</span>
+                  <span className="text-[0.7rem] text-[#6B7280] dark:text-[#9CA3AF] whitespace-nowrap overflow-hidden text-ellipsis">Black / 32</span>
                 </div>
               </div>
-              <span className="status-pill alert">5 in stock</span>
+              <span className="text-[0.65rem] py-[0.15rem] px-2 rounded-xl font-semibold shrink-0 text-[#DC2626] font-medium">5 in stock</span>
             </div>
-            <div className="list-item">
-              <div className="list-item-left">
-                <img src="/product/1.png" className="list-item-image" alt="Product" />
-                <div className="list-item-info">
-                  <span className="list-item-title">{truncateWords('SAGASA Oversized Hoodie')}</span>
-                  <span className="list-item-subtitle">Grey / L</span>
+            <div className="flex justify-between items-center gap-2">
+              <div className="flex items-center gap-3 min-w-0 flex-1">
+                <img src="/product/1.png" className="w-9 h-9 rounded-lg object-cover bg-[#F3F4F6] dark:bg-[#1F2937] shrink-0" alt="Product" />
+                <div className="flex flex-col min-w-0 flex-1">
+                  <span className="text-[0.8rem] font-semibold text-[#111827] dark:text-[#F9FAFB] mb-[0.1rem] whitespace-nowrap overflow-hidden text-ellipsis">{truncateWords('SAGASA Oversized Hoodie')}</span>
+                  <span className="text-[0.7rem] text-[#6B7280] dark:text-[#9CA3AF] whitespace-nowrap overflow-hidden text-ellipsis">Grey / L</span>
                 </div>
               </div>
-              <span className="status-pill alert">7 in stock</span>
+              <span className="text-[0.65rem] py-[0.15rem] px-2 rounded-xl font-semibold shrink-0 text-[#DC2626] font-medium">7 in stock</span>
             </div>
-            <div className="list-item">
-              <div className="list-item-left">
-                <img src="/product/2.png" className="list-item-image" alt="Product" />
-                <div className="list-item-info">
-                  <span className="list-item-title">{truncateWords('SAGASA Denim Jacket')}</span>
-                  <span className="list-item-subtitle">Blue / M</span>
+            <div className="flex justify-between items-center gap-2">
+              <div className="flex items-center gap-3 min-w-0 flex-1">
+                <img src="/product/2.png" className="w-9 h-9 rounded-lg object-cover bg-[#F3F4F6] dark:bg-[#1F2937] shrink-0" alt="Product" />
+                <div className="flex flex-col min-w-0 flex-1">
+                  <span className="text-[0.8rem] font-semibold text-[#111827] dark:text-[#F9FAFB] mb-[0.1rem] whitespace-nowrap overflow-hidden text-ellipsis">{truncateWords('SAGASA Denim Jacket')}</span>
+                  <span className="text-[0.7rem] text-[#6B7280] dark:text-[#9CA3AF] whitespace-nowrap overflow-hidden text-ellipsis">Blue / M</span>
                 </div>
               </div>
-              <span className="status-pill alert">6 in stock</span>
+              <span className="text-[0.65rem] py-[0.15rem] px-2 rounded-xl font-semibold shrink-0 text-[#DC2626] font-medium">6 in stock</span>
             </div>
-            <div className="list-item">
-              <div className="list-item-left">
-                <img src="/product/3.png" className="list-item-image" alt="Product" />
-                <div className="list-item-info">
-                  <span className="list-item-title">{truncateWords('SAGASA Relaxed Shorts')}</span>
-                  <span className="list-item-subtitle">Beige / 30</span>
+            <div className="flex justify-between items-center gap-2">
+              <div className="flex items-center gap-3 min-w-0 flex-1">
+                <img src="/product/3.png" className="w-9 h-9 rounded-lg object-cover bg-[#F3F4F6] dark:bg-[#1F2937] shrink-0" alt="Product" />
+                <div className="flex flex-col min-w-0 flex-1">
+                  <span className="text-[0.8rem] font-semibold text-[#111827] dark:text-[#F9FAFB] mb-[0.1rem] whitespace-nowrap overflow-hidden text-ellipsis">{truncateWords('SAGASA Relaxed Shorts')}</span>
+                  <span className="text-[0.7rem] text-[#6B7280] dark:text-[#9CA3AF] whitespace-nowrap overflow-hidden text-ellipsis">Beige / 30</span>
                 </div>
               </div>
-              <span className="status-pill alert">4 in stock</span>
+              <span className="text-[0.65rem] py-[0.15rem] px-2 rounded-xl font-semibold shrink-0 text-[#DC2626] font-medium">4 in stock</span>
             </div>
           </div>
         </div>

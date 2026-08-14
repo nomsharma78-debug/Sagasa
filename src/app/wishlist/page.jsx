@@ -5,8 +5,6 @@ import { motion } from 'framer-motion';
 import { Heart } from 'lucide-react';
 import Link from 'next/link';
 
-import './Wishlist.css';
-
 const Wishlist = () => {
   // For now, we will simulate an empty wishlist as requested
   // In a full implementation, this would pull from a context or global state
@@ -17,18 +15,18 @@ const Wishlist = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="wishlist-page container"
+      className="min-h-[calc(100vh-var(--header-height))] pt-[calc(var(--header-height)+2rem)] pb-[var(--spacing-xl)] container"
     >
-      <div className="wishlist-header">
-        <h1>My Wishlist</h1>
-        <p className="wishlist-count">{wishlistItems.length} Items</p>
+      <div className="text-center mb-16">
+        <h1 className="text-[2.5rem] mb-2">My Wishlist</h1>
+        <p className="text-[var(--color-text-muted)] text-sm">{wishlistItems.length} Items</p>
       </div>
 
       {wishlistItems.length === 0 ? (
-        <div className="wishlist-empty">
-          <Heart size={64} strokeWidth={1} className="wishlist-empty-icon" />
-          <h2>Your wishlist is empty</h2>
-          <p>Save the items you love to keep track of them here.</p>
+        <div className="flex flex-col items-center justify-center text-center py-16 px-4 bg-[var(--color-surface)] rounded-lg min-h-[400px]">
+          <Heart size={64} strokeWidth={1} className="text-[var(--color-border)] mb-6" />
+          <h2 className="text-[1.5rem] mb-3">Your wishlist is empty</h2>
+          <p className="text-[var(--color-text-muted)] max-w-[400px]">Save the items you love to keep track of them here.</p>
           <Link href="/shop" className="btn btn-primary" style={{ marginTop: '2rem' }}>
             <div className="btn-content">Continue Shopping</div>
           </Link>

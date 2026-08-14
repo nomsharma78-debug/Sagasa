@@ -1,1 +1,1 @@
-export default function SettingsPage() { return (<div className="admin-container"><h1 style={{fontSize: '1.5rem', fontWeight: 600, marginBottom: '2rem'}}>Settings</h1><div className="admin-card"><p>This module is under construction.</p></div></div>); }
+export default function SettingsPage() { return (<div className="mx-auto w-full max-w-[1600px]"><h1 style={{fontSize: '1.5rem', fontWeight: 600, marginBottom: '2rem'}}>Settings</h1><div className="admin-card"><p>This module is under construction.</p></div></div>); }

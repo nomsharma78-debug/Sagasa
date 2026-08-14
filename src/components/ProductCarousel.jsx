@@ -2,7 +2,6 @@
 
 import { useRef, useState, useEffect } from 'react';
 import ProductCard from './ProductCard';
-import './ProductCarousel.css';
 
 // Unique SVG icons for the scroll buttons
 const LeftArrowSVG = () => (
@@ -43,15 +42,18 @@ const ProductCarousel = ({ title, products }) => {
     }
   };
 
+  const btnBaseClass = "flex items-center justify-center w-[44px] h-[44px] rounded-full border border-[var(--color-border)] bg-[var(--color-background)] text-[var(--color-foreground)] cursor-pointer transition-all duration-200 absolute top-[40%] -translate-y-1/2 z-10 shadow-[0_4px_12px_rgba(0,0,0,0.1)] hover:border-[var(--color-foreground)] hover:bg-[var(--color-foreground)] hover:text-[var(--color-background)]";
+  const disabledClass = "opacity-0 pointer-events-none";
+
   return (
-    <div className="product-carousel-wrapper">
-      <div className="product-carousel-header">
+    <div className="flex flex-col">
+      <div>
         <h2 className="pdp-cross-sell-title">{title}</h2>
       </div>
       
-      <div className="carousel-track-container">
+      <div className="relative">
         <button 
-          className={`carousel-control-btn left-btn ${!canScrollLeft ? 'disabled' : ''}`}
+          className={`${btnBaseClass} left-[-22px] ${!canScrollLeft ? disabledClass : ''}`}
           onClick={() => scroll('left')}
           disabled={!canScrollLeft}
           aria-label="Scroll Left"
@@ -72,7 +74,7 @@ const ProductCarousel = ({ title, products }) => {
         </div>
 
         <button 
-          className={`carousel-control-btn right-btn ${!canScrollRight ? 'disabled' : ''}`}
+          className={`${btnBaseClass} right-[-22px] ${!canScrollRight ? disabledClass : ''}`}
           onClick={() => scroll('right')}
           disabled={!canScrollRight}
           aria-label="Scroll Right"

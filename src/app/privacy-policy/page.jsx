@@ -1,4 +1,3 @@
-import '../legal.css';
 
 export const metadata = {
   title: 'Privacy Policy | Sagasa',
@@ -7,13 +6,13 @@ export const metadata = {
 
 export default function PrivacyPolicy() {
   return (
-    <div className="legal-container">
-      <div className="legal-header">
-        <h1 className="legal-title">Privacy Policy</h1>
-        <p className="legal-last-updated">Last Updated: August 13, 2026</p>
+    <div className="max-w-[800px] mx-auto px-8 pt-16 pb-32 font-inherit">
+      <div className="mb-12 border-b border-border pb-8">
+        <h1 className="text-[2.5rem] font-normal mb-4 tracking-[-0.02em]">Privacy Policy</h1>
+        <p className="text-text-muted text-[0.9rem]">Last Updated: August 13, 2026</p>
       </div>
 
-      <div className="legal-content">
+      <div className="text-foreground leading-[1.8] text-[1.05rem] [&>h2]:text-[1.5rem] [&>h2]:font-medium [&>h2]:mt-12 [&>h2]:mb-5 [&>h2]:tracking-[-0.01em] [&>p]:mb-6 [&>p]:text-text-muted [&>ul]:mb-6 [&>ul]:pl-6 [&>ul]:text-text-muted [&>ul]:list-disc [&>li]:mb-2">
         <p>
           At Sagasa, we are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy outlines how we collect, use, and safeguard your data when you interact with our website and services.
         </p>

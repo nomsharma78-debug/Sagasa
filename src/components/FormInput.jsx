@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from 'react';
-import './FormInput.css';
 
 const FormInput = ({ 
   label, 
@@ -19,10 +18,12 @@ const FormInput = ({
   const handleFocus = () => setIsFocused(true);
   const handleBlur = () => setIsFocused(false);
 
+  const baseInputClass = "w-full p-4 [font-family:var(--font-body)] text-base text-[var(--color-foreground)] bg-transparent border border-[var(--color-border)] rounded transition-all duration-200 outline-none focus:border-[var(--color-accent)] focus:shadow-[0_0_0_1px_var(--color-accent)] placeholder:text-[var(--color-text-muted)] placeholder:opacity-60";
+
   return (
-    <div className={`form-group ${isFocused ? 'focused' : ''} ${value ? 'has-value' : ''}`}>
-      <label className="form-label" htmlFor={name}>
-        {label} {required && <span className="required">*</span>}
+    <div className={`flex flex-col gap-2 mb-6 w-full ${isFocused ? 'focused' : ''} ${value ? 'has-value' : ''}`}>
+      <label className={`[font-family:var(--font-body)] text-sm font-medium transition-colors duration-200 ease-in-out ${isFocused ? 'text-[var(--color-accent)]' : 'text-[var(--color-foreground)]'}`} htmlFor={name}>
+        {label} {required && <span className="text-[#d32f2f]">*</span>}
       </label>
       {isTextarea ? (
         <textarea
@@ -34,7 +35,7 @@ const FormInput = ({
           onBlur={handleBlur}
           placeholder={placeholder}
           required={required}
-          className="form-control"
+          className={`${baseInputClass} resize-y min-h-[100px]`}
           rows={rows}
         />
       ) : (
@@ -48,7 +49,7 @@ const FormInput = ({
           onBlur={handleBlur}
           placeholder={placeholder}
           required={required}
-          className="form-control"
+          className={baseInputClass}
         />
       )}
     </div>

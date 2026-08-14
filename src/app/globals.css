@@ -1,100 +1,86 @@
 @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=Inter:wght@300;400;500;600&display=swap');
 
-:root {
-  /* Colors */
-  --color-background: #FCFAF8;
-  --color-foreground: #2C2A29;
-  --color-surface: #F5EFEB;
-  --color-surface-hover: #E8E2D9;
-  --color-border: #DED4C7;
-  --color-text-muted: #8C8276;
-  --color-accent: #2C2A29;
-  --color-accent-foreground: #FCFAF8;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-  /* Typography */
-  --font-display: 'Bricolage Grotesque', sans-serif;
-  --font-body: 'Inter', sans-serif;
+@layer base {
+  :root {
+    --color-background: #FCFAF8;
+    --color-foreground: #2C2A29;
+    --color-surface: #F5EFEB;
+    --color-surface-hover: #E8E2D9;
+    --color-border: #DED4C7;
+    --color-text-muted: #8C8276;
+    --color-accent: #2C2A29;
+    --color-accent-foreground: #FCFAF8;
 
-  /* Spacing */
-  --spacing-xs: 0.5rem;
-  --spacing-sm: 1rem;
-  --spacing-md: 2rem;
-  --spacing-lg: 4rem;
-  --spacing-xl: 8rem;
+    --font-display: 'Bricolage Grotesque', sans-serif;
+    --font-body: 'Inter', sans-serif;
 
-  /* Header Height */
-  --header-height: 60px;
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 2rem;
+    --spacing-lg: 4rem;
+    --spacing-xl: 8rem;
+
+    --header-height: 60px;
+  }
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: theme('fontFamily.body');
+    background-color: theme('colors.background');
+    color: theme('colors.foreground');
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: theme('fontFamily.display');
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+
+  a {
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: var(--font-body);
-  background-color: var(--color-background);
-  color: var(--color-foreground);
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-display);
-  font-weight: 400;
-  line-height: 1.1;
-  letter-spacing: -0.01em;
-}
-
-a {
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-/* ==================================================
-   LOGO CSS (Handles Dark Mode Inversion)
-   ================================================== */
-.logo-img {
-  mix-blend-mode: multiply; /* Removes white background on light surface */
-}
-
-body.dark-mode .logo-img {
-  filter: invert(1);
-  mix-blend-mode: screen; /* Makes black background transparent */
-}
-
-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
-
-/* Utilities */
+/* Utilities kept for backwards compatibility during migration */
 .container {
   max-width: 1440px;
   margin: 0 auto;
-  padding: 0 var(--spacing-sm);
+  padding: 0 1rem;
 }
-
 @media (min-width: 768px) {
   .container {
-    padding: 0 var(--spacing-md);
+    padding: 0 2rem;
   }
 }
 
 .section {
-  padding: var(--spacing-lg) 0;
+  padding: 4rem 0;
 }
-
 @media (min-width: 768px) {
   .section {
-    padding: var(--spacing-xl) 0;
+    padding: 8rem 0;
   }
 }
 
-/* Base Animations */
 @keyframes infiniteScroll {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
@@ -106,4 +92,13 @@ img {
 .hide-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* Logo Dark Mode Inversion */
+.logo-img {
+  mix-blend-mode: multiply;
+}
+.dark .logo-img {
+  filter: invert(1);
+  mix-blend-mode: screen;
 }

@@ -6,7 +6,6 @@ import { X, Search } from 'lucide-react';
 import Link from 'next/link';
 
 import { products } from '@/data/products';
-import './SearchOverlay.css';
 
 const SearchOverlay = ({ isOpen, onClose }) => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -40,49 +39,53 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     setResults(filtered);
   }, [searchQuery]);
 
+  const searchResultItemClass = "flex flex-col gap-3 group flex-none w-[150px]";
+  const searchResultImgClass = "w-full aspect-[3/4] overflow-hidden bg-[var(--color-surface)]";
+  const searchResultImgInnerClass = "w-full h-full object-cover transition-transform duration-[400ms] ease-in-out group-hover:scale-105";
+
   return (
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="search-overlay"
+          className="absolute top-full left-0 w-full bg-[var(--color-background)] border-b border-[var(--color-border)] shadow-[0_10px_30px_rgba(0,0,0,0.05)] z-[1000] pt-8 pb-12"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
         >
-          <div className="search-overlay-container container">
-            <div className="search-header">
-              <div className="search-input-wrapper">
-                <Search size={24} className="search-icon-input" />
+          <div className="container">
+            <div className="flex items-center justify-between mb-8 border-b border-[var(--color-foreground)] pb-4">
+              <div className="flex items-center flex-1 gap-4">
+                <Search size={24} className="text-[var(--color-text-muted)]" />
                 <input
                   ref={inputRef}
                   type="text"
                   placeholder="What are you looking for?"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="search-input"
+                  className="flex-1 bg-transparent border-none [font-family:var(--font-display)] text-[2rem] text-[var(--color-foreground)] outline-none placeholder:text-[var(--color-border)]"
                 />
               </div>
-              <button className="search-close-btn" onClick={onClose} aria-label="Close search">
+              <button className="bg-transparent border-none cursor-pointer text-[var(--color-foreground)] transition-transform duration-200 hover:rotate-90" onClick={onClose} aria-label="Close search">
                 <X size={28} strokeWidth={1.5} />
               </button>
             </div>
 
-            <div className="search-results-area">
+            <div className="min-h-[200px]">
               {searchQuery && results.length > 0 && (
-                <div className="search-results-grid">
+                <div className="flex gap-6 overflow-x-auto pb-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
                   {results.slice(0, 8).map((product) => (
                     <Link key={product.id} 
                       href={`/product/${product.id}`} 
-                      className="search-result-item"
+                      className={searchResultItemClass}
                       onClick={onClose}
                     >
-                      <div className="search-result-img">
-                        <img src={product.image1} alt={product.title} />
+                      <div className={searchResultImgClass}>
+                        <img src={product.image1} alt={product.title} className={searchResultImgInnerClass} />
                       </div>
                       <div className="search-result-info">
-                        <h4>{product.title}</h4>
-                        <p>${product.price.toFixed(2)}</p>
+                        <h4 className="text-sm font-medium mb-1">{product.title}</h4>
+                        <p className="text-sm text-[var(--color-text-muted)]">${product.price.toFixed(2)}</p>
                       </div>
                     </Link>
                   ))}
@@ -90,28 +93,28 @@ const SearchOverlay = ({ isOpen, onClose }) => {
               )}
 
               {searchQuery && results.length === 0 && (
-                <div className="search-no-results">
-                  <p>No results found for "{searchQuery}"</p>
-                  <p className="search-suggestion">Try searching for "dress", "jacket", or "sale"</p>
+                <div className="text-center py-8">
+                  <p className="text-xl mb-2">No results found for "{searchQuery}"</p>
+                  <p className="text-[var(--color-text-muted)] text-sm">Try searching for "dress", "jacket", or "sale"</p>
                 </div>
               )}
 
               {!searchQuery && (
-                <div className="search-trending">
-                  <p className="search-suggestions-title">Trending Now</p>
-                  <div className="search-results-grid">
+                <div>
+                  <p className="text-sm uppercase tracking-[0.05em] text-[var(--color-text-muted)] mb-4">Trending Now</p>
+                  <div className="flex gap-6 overflow-x-auto pb-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
                     {[...products].sort((a, b) => (b.isBestseller ? 1 : 0) - (a.isBestseller ? 1 : 0)).slice(0, 8).map((product) => (
                       <Link key={product.id} 
                         href={`/product/${product.id}`} 
-                        className="search-result-item"
+                        className={searchResultItemClass}
                         onClick={onClose}
                       >
-                        <div className="search-result-img">
-                          <img src={product.image1} alt={product.title} />
+                        <div className={searchResultImgClass}>
+                          <img src={product.image1} alt={product.title} className={searchResultImgInnerClass} />
                         </div>
                         <div className="search-result-info">
-                          <h4>{product.title}</h4>
-                          <p>${product.price.toFixed(2)}</p>
+                          <h4 className="text-sm font-medium mb-1">{product.title}</h4>
+                          <p className="text-sm text-[var(--color-text-muted)]">${product.price.toFixed(2)}</p>
                         </div>
                       </Link>
                     ))}
@@ -121,8 +124,8 @@ const SearchOverlay = ({ isOpen, onClose }) => {
             </div>
             
             {results.length > 8 && (
-              <div className="search-view-all">
-                <Link href={`/shop`} onClick={onClose}>
+              <div className="mt-8 text-center">
+                <Link href={`/shop`} onClick={onClose} className="inline-block text-sm font-medium border-b border-[var(--color-foreground)] pb-1">
                   View all {results.length} results
                 </Link>
               </div>

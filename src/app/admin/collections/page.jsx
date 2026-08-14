@@ -1,1 +1,1 @@
-export default function CollectionsPage() { return (<div className="admin-container"><h1 style={{fontSize: '1.5rem', fontWeight: 600, marginBottom: '2rem'}}>Collections</h1><div className="admin-card"><p>This module is under construction.</p></div></div>); }
+export default function CollectionsPage() { return (<div className="mx-auto w-full max-w-[1600px]"><h1 style={{fontSize: '1.5rem', fontWeight: 600, marginBottom: '2rem'}}>Collections</h1><div className="admin-card"><p>This module is under construction.</p></div></div>); }
