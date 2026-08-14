@@ -1,34 +1,6 @@
-.admin-layout {
-  min-height: 100vh;
-  background-color: #f3f4f6;
-  font-family: var(--font-body);
-  display: flex;
-  flex-direction: column;
-}
+/* Specific Catalog Upload Styles */
 
-.admin-header {
-  background-color: white;
-  border-bottom: 1px solid #e5e7eb;
-  padding: 1rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: sticky;
-  top: 0;
-  z-index: 50;
-}
-
-.admin-header h1 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin: 0;
-  color: #111827;
-}
-
-.admin-container {
-  max-width: 1000px;
-  margin: 2rem auto;
-  padding: 0 1rem;
+.catalog-upload-page {
   width: 100%;
 }
 

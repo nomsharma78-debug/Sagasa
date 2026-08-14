@@ -9,6 +9,10 @@ export default function ConditionalNavbar() {
   if (pathname.startsWith('/admin')) {
     return null;
   }
-  
-  return <Navbar />;
+  return (
+    <>
+      <Navbar />
+      <div style={{ height: 'var(--header-height)' }} />
+    </>
+  );
 }

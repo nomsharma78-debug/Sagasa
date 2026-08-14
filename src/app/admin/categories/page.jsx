@@ -1,0 +1,1 @@
+export default function CategoriesPage() { return (<div className="admin-container"><h1 style={{fontSize: '1.5rem', fontWeight: 600, marginBottom: '2rem'}}>Categories</h1><div className="admin-card"><p>This module is under construction.</p></div></div>); }

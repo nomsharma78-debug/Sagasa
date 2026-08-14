@@ -49,8 +49,20 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 a {
-  color: inherit;
-  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* ==================================================
+   LOGO CSS (Handles Dark Mode Inversion)
+   ================================================== */
+.logo-img {
+  mix-blend-mode: multiply; /* Removes white background on light surface */
+}
+
+body.dark-mode .logo-img {
+  filter: invert(1);
+  mix-blend-mode: screen; /* Makes black background transparent */
 }
 
 img {

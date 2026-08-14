@@ -110,12 +110,7 @@ export default function AdminCatalog() {
   };
 
   return (
-    <div className="admin-layout">
-      <header className="admin-header">
-        <h1>Sagasa Admin - Catalog Upload</h1>
-        <div>Admin User</div>
-      </header>
-
+    <div className="catalog-upload-page">
       <main className="admin-container">
         
         {/* Basic Info */}

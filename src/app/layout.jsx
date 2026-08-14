@@ -12,7 +12,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <ConditionalNavbar />
-        <main style={{ minHeight: '100vh', paddingTop: 'var(--header-height)' }}>
+        <main style={{ minHeight: '100vh' }}>
           {children}
         </main>
         <ConditionalFooter />

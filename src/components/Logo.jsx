@@ -8,9 +8,10 @@ const Logo = ({ className = '', style = {}, width = "auto", height = "45px", hid
     display: 'block', 
     width, 
     height, 
-    objectFit: 'contain',
-    mixBlendMode: 'multiply' // This magically removes the white background on light surfaces!
+    objectFit: 'contain'
   };
+  
+  const finalClass = `logo-img ${className}`.trim();
 
   if (hideText) {
     // For the Navbar: Use just the icon
@@ -18,7 +19,7 @@ const Logo = ({ className = '', style = {}, width = "auto", height = "45px", hid
       <img 
         src={logoIcon.src} 
         alt="Sagasa Logo" 
-        className={className}
+        className={finalClass}
         style={commonStyle}
       />
     );
@@ -29,7 +30,7 @@ const Logo = ({ className = '', style = {}, width = "auto", height = "45px", hid
     <img 
       src={logoFull.src} 
       alt="Sagasa Full Logo" 
-      className={className}
+      className={finalClass}
       style={commonStyle}
     />
   );
