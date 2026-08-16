@@ -43,6 +43,18 @@ const SearchOverlay = ({ isOpen, onClose }) => {
   const searchResultImgClass = "w-full aspect-[3/4] overflow-hidden bg-[var(--color-surface)]";
   const searchResultImgInnerClass = "w-full h-full object-cover transition-transform duration-[400ms] ease-in-out group-hover:scale-105";
 
+  const ProductItem = (product) => (
+    <Link key={product.id} href={`/product/${product.id}`} className={searchResultItemClass} onClick={onClose}>
+      <div className={searchResultImgClass}>
+        <img src={product.image1} alt={product.title} className={searchResultImgInnerClass} />
+      </div>
+      <div className="search-result-info">
+        <h4 className="text-sm font-medium mb-1">{product.title}</h4>
+        <p className="text-sm text-[var(--color-text-muted)]">${product.price.toFixed(2)}</p>
+      </div>
+    </Link>
+  );
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -74,21 +86,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
             <div className="min-h-[200px]">
               {searchQuery && results.length > 0 && (
                 <div className="flex gap-6 overflow-x-auto pb-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-                  {results.slice(0, 8).map((product) => (
-                    <Link key={product.id} 
-                      href={`/product/${product.id}`} 
-                      className={searchResultItemClass}
-                      onClick={onClose}
-                    >
-                      <div className={searchResultImgClass}>
-                        <img src={product.image1} alt={product.title} className={searchResultImgInnerClass} />
-                      </div>
-                      <div className="search-result-info">
-                        <h4 className="text-sm font-medium mb-1">{product.title}</h4>
-                        <p className="text-sm text-[var(--color-text-muted)]">${product.price.toFixed(2)}</p>
-                      </div>
-                    </Link>
-                  ))}
+                  {results.slice(0, 8).map(ProductItem)}
                 </div>
               )}
 
@@ -103,21 +101,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                 <div>
                   <p className="text-sm uppercase tracking-[0.05em] text-[var(--color-text-muted)] mb-4">Trending Now</p>
                   <div className="flex gap-6 overflow-x-auto pb-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-                    {[...products].sort((a, b) => (b.isBestseller ? 1 : 0) - (a.isBestseller ? 1 : 0)).slice(0, 8).map((product) => (
-                      <Link key={product.id} 
-                        href={`/product/${product.id}`} 
-                        className={searchResultItemClass}
-                        onClick={onClose}
-                      >
-                        <div className={searchResultImgClass}>
-                          <img src={product.image1} alt={product.title} className={searchResultImgInnerClass} />
-                        </div>
-                        <div className="search-result-info">
-                          <h4 className="text-sm font-medium mb-1">{product.title}</h4>
-                          <p className="text-sm text-[var(--color-text-muted)]">${product.price.toFixed(2)}</p>
-                        </div>
-                      </Link>
-                    ))}
+                    {[...products].sort((a, b) => (b.isBestseller ? 1 : 0) - (a.isBestseller ? 1 : 0)).slice(0, 8).map(ProductItem)}
                   </div>
                 </div>
               )}

@@ -77,27 +77,19 @@ export default function AdminTopbar() {
                 <button className="cursor-pointer border-none bg-transparent p-0 text-[0.7rem] font-medium text-[#5D5FEF]">Mark all as read</button>
               </div>
               <div className="flex max-h-[300px] flex-col overflow-y-auto">
-                <div className="flex cursor-pointer gap-3 border-b border-[#F9FAFB] p-4 transition-colors duration-200 hover:bg-[#F9FAFB] bg-[#F8F7FF] dark:border-[#1F2937] dark:bg-[rgba(93,95,239,0.1)] dark:hover:bg-[#1F2937]">
-                  <div className="mt-1 h-2 w-2 shrink-0 rounded-full bg-[#5D5FEF]"></div>
-                  <div>
-                    <p className="m-0 mb-1 text-[0.8rem] leading-[1.4] text-[#374151] dark:text-[#F9FAFB]"><strong>New Order #SG2548</strong> placed by Rohit Sharma.</p>
-                    <span className="text-[0.65rem] text-[#9CA3AF] dark:text-[#6B7280]">2 minutes ago</span>
+                {[
+                  { title: 'New Order #SG2548', desc: ' placed by Rohit Sharma.', time: '2 minutes ago', unread: true },
+                  { title: 'Low Stock Alert:', desc: ' SAGASA Cargo Pants (Black/32)', time: '1 hour ago', unread: true },
+                  { title: 'System Update:', desc: ' Dashboard successfully rebuilt.', time: '5 hours ago', unread: false }
+                ].map((notif, i) => (
+                  <div key={i} className={`flex cursor-pointer gap-3 border-b border-[#F9FAFB] p-4 transition-colors duration-200 hover:bg-[#F9FAFB] dark:border-[#1F2937] dark:hover:bg-[#1F2937] ${notif.unread ? 'bg-[#F8F7FF] dark:bg-[rgba(93,95,239,0.1)]' : ''}`}>
+                    <div className={`mt-1 h-2 w-2 shrink-0 rounded-full ${notif.unread ? 'bg-[#5D5FEF]' : 'bg-transparent'}`}></div>
+                    <div>
+                      <p className="m-0 mb-1 text-[0.8rem] leading-[1.4] text-[#374151] dark:text-[#F9FAFB]"><strong>{notif.title}</strong>{notif.desc}</p>
+                      <span className="text-[0.65rem] text-[#9CA3AF] dark:text-[#6B7280]">{notif.time}</span>
+                    </div>
                   </div>
-                </div>
-                <div className="flex cursor-pointer gap-3 border-b border-[#F9FAFB] p-4 transition-colors duration-200 hover:bg-[#F9FAFB] bg-[#F8F7FF] dark:border-[#1F2937] dark:bg-[rgba(93,95,239,0.1)] dark:hover:bg-[#1F2937]">
-                  <div className="mt-1 h-2 w-2 shrink-0 rounded-full bg-[#5D5FEF]"></div>
-                  <div>
-                    <p className="m-0 mb-1 text-[0.8rem] leading-[1.4] text-[#374151] dark:text-[#F9FAFB]"><strong>Low Stock Alert:</strong> SAGASA Cargo Pants (Black/32)</p>
-                    <span className="text-[0.65rem] text-[#9CA3AF] dark:text-[#6B7280]">1 hour ago</span>
-                  </div>
-                </div>
-                <div className="flex cursor-pointer gap-3 border-b border-[#F9FAFB] p-4 transition-colors duration-200 hover:bg-[#F9FAFB] dark:border-[#1F2937] dark:hover:bg-[#1F2937]">
-                  <div className="mt-1 h-2 w-2 shrink-0 rounded-full bg-transparent"></div>
-                  <div>
-                    <p className="m-0 mb-1 text-[0.8rem] leading-[1.4] text-[#374151] dark:text-[#F9FAFB]"><strong>System Update:</strong> Dashboard successfully rebuilt.</p>
-                    <span className="text-[0.65rem] text-[#9CA3AF] dark:text-[#6B7280]">5 hours ago</span>
-                  </div>
-                </div>
+                ))}
               </div>
               <div className="border-t border-[#F3F4F6] px-4 py-3 text-center dark:border-[#1F2937]">
                 <Link href="/admin/notifications" className="text-[0.75rem] font-medium text-[#5D5FEF] no-underline">View all notifications</Link>
@@ -127,16 +119,18 @@ export default function AdminTopbar() {
                 </div>
               </div>
               <div className="flex flex-col">
-                <Link href="/admin/settings/profile" className="flex items-center gap-3 px-4 py-3 text-[0.8rem] text-[#4B5563] no-underline transition-all duration-200 hover:bg-[#F3F4F6] hover:text-[#111827] dark:text-[#9CA3AF] dark:hover:bg-[#1F2937] dark:hover:text-[#F9FAFB]">
-                  <User size={16} /> My Profile
-                </Link>
-                <Link href="/admin/settings" className="flex items-center gap-3 px-4 py-3 text-[0.8rem] text-[#4B5563] no-underline transition-all duration-200 hover:bg-[#F3F4F6] hover:text-[#111827] dark:text-[#9CA3AF] dark:hover:bg-[#1F2937] dark:hover:text-[#F9FAFB]">
-                  <Settings size={16} /> Account Settings
-                </Link>
-                <div className="my-1 h-px bg-[#F3F4F6] dark:bg-[#1F2937]"></div>
-                <Link href="/" className="flex items-center gap-3 px-4 py-3 text-[0.8rem] text-[#EF4444] no-underline transition-all duration-200 hover:bg-[#FEF2F2] dark:hover:bg-[#1F2937]">
-                  <LogOut size={16} /> Logout
-                </Link>
+                {[
+                  { n: 'My Profile', i: User, h: '/admin/settings/profile', c: 'text-[#4B5563] hover:bg-[#F3F4F6] hover:text-[#111827] dark:text-[#9CA3AF] dark:hover:bg-[#1F2937] dark:hover:text-[#F9FAFB]' },
+                  { n: 'Account Settings', i: Settings, h: '/admin/settings', c: 'text-[#4B5563] hover:bg-[#F3F4F6] hover:text-[#111827] dark:text-[#9CA3AF] dark:hover:bg-[#1F2937] dark:hover:text-[#F9FAFB]' },
+                  { divider: true },
+                  { n: 'Logout', i: LogOut, h: '/', c: 'text-[#EF4444] hover:bg-[#FEF2F2] dark:hover:bg-[#1F2937]' }
+                ].map((item, idx) => item.divider ? (
+                  <div key={idx} className="my-1 h-px bg-[#F3F4F6] dark:bg-[#1F2937]"></div>
+                ) : (
+                  <Link key={idx} href={item.h} className={`flex items-center gap-3 px-4 py-3 text-[0.8rem] no-underline transition-all duration-200 ${item.c}`}>
+                    <item.i size={16} /> {item.n}
+                  </Link>
+                ))}
               </div>
             </div>
           )}

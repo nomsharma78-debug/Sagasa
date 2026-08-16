@@ -2,8 +2,9 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, CheckCircle, RefreshCcw, Globe } from 'lucide-react';
 import ProductCard from '@/components/ProductCard';
 import Button from '@/components/Button';
 import { products } from '@/data/products';
@@ -39,58 +40,61 @@ const Home = () => {
       className="home-page"
     >
       {/* Hero Section */}
-      <section className="pt-[var(--spacing-md)] pb-[var(--spacing-xl)]">
-        <div className="container flex flex-col gap-[var(--spacing-md)] lg:flex-row lg:items-center lg:min-h-[calc(100vh-var(--header-height)-100px)]">
+      <section className="w-full h-[100vh] min-h-[600px] max-h-[900px] flex flex-col md:flex-row relative overflow-hidden">
+        {/* Left Side: White Background & Text */}
+        <div className="w-full md:w-1/2 h-full bg-[#FCFBF8] flex flex-col justify-center px-8 md:px-20 relative z-10">
           <motion.div 
-            className="flex-1 flex flex-col gap-6 max-w-[600px]"
+            className="flex flex-col gap-5 max-w-[500px] -mt-16"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
           >
-            <motion.h1 variants={itemVariants} className="text-[3.5rem] leading-none md:text-[5vw]">
-              Modern Clothing for Women and Men
+            <motion.h1 variants={itemVariants} className="text-[3.5rem] md:text-[4rem] leading-[1.05] font-medium font-[family-name:var(--font-display)] text-[#222]">
+              Modern Clothing<br/>for Women and Men
             </motion.h1>
-            <motion.p variants={itemVariants} className="text-lg text-[var(--color-text-muted)] max-w-[90%]">
-              Sagasa offers timeless clothing collections for everyday wear. 
-              Minimalist design, comfort, and quality fabrics.
+            <motion.p variants={itemVariants} className="text-[1rem] text-[#666] leading-relaxed max-w-[85%] mt-1">
+              Timeless style. Thoughtful design. Unmatched comfort. Discover pieces that are made for you.
             </motion.p>
             <motion.div variants={itemVariants} className="flex flex-wrap gap-4 mt-4">
-              <Button to="/shop" variant="primary">Shop Collection</Button>
-              <Button to="/shop" variant="outline">Explore New Arrivals</Button>
+              <Link href="/shop?category=women" className="px-8 py-3.5 bg-[#222] text-white font-medium text-[0.85rem] border border-[#222] transition-colors hover:bg-[#444] hover:border-[#444]">
+                Shop Women
+              </Link>
+              <Link href="/shop?category=men" className="px-8 py-3.5 bg-transparent text-[#222] font-medium text-[0.85rem] border border-[#CCC] transition-all hover:border-[#222]">
+                Shop Men
+              </Link>
             </motion.div>
           </motion.div>
+
+          {/* Bottom Features */}
           <motion.div 
-            className="flex-1 w-full aspect-[4/5] rounded-lg overflow-hidden lg:aspect-[3/4] lg:h-[80vh] lg:max-h-[800px]"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+            className="absolute bottom-8 left-8 md:left-20 flex items-center gap-8 text-[#888]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1, duration: 0.8 }}
           >
-            <img 
-              src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80" 
-              alt="Sagasa Fashion" 
-              className="w-full h-full object-cover"
-            />
+            <div className="flex items-center gap-2">
+              <CheckCircle size={18} strokeWidth={1.5} />
+              <span className="text-[0.8rem] font-medium">Premium Quality</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <RefreshCcw size={18} strokeWidth={1.5} />
+              <span className="text-[0.8rem] font-medium">Easy Returns</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Globe size={18} strokeWidth={1.5} />
+              <span className="text-[0.8rem] font-medium">Worldwide Shipping</span>
+            </div>
           </motion.div>
         </div>
-      </section>
 
-      {/* Marquee Section */}
-      <section className="bg-[var(--color-accent)] text-[var(--color-accent-foreground)] py-4 overflow-hidden">
-        <div className="flex w-fit [animation:infiniteScroll_20s_linear_infinite]">
-          <div className="flex shrink-0">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <span key={i} className="font-[family-name:var(--font-display)] text-base font-medium uppercase tracking-[0.05em] whitespace-nowrap flex items-center">
-                Free shipping on orders over $149 <span className="mx-8 text-[0.5rem]">•</span>
-              </span>
-            ))}
-          </div>
-          <div className="flex shrink-0" aria-hidden="true">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <span key={`dup-${i}`} className="font-[family-name:var(--font-display)] text-base font-medium uppercase tracking-[0.05em] whitespace-nowrap flex items-center">
-                Free shipping on orders over $149 <span className="mx-8 text-[0.5rem]">•</span>
-              </span>
-            ))}
-          </div>
+        {/* Right Side: Image Full Bleed */}
+        <div className="w-full md:w-1/2 h-full relative">
+          <div className="absolute inset-0 bg-[linear-gradient(to_bottom,#FCFBF8_0%,transparent_15%,transparent_85%,#FCFBF8_100%)] z-10 pointer-events-none"></div>
+          <img 
+            src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80" 
+            alt="Sagasa Collection" 
+            className="w-full h-full object-cover object-center relative z-0"
+          />
         </div>
       </section>
 
@@ -98,35 +102,28 @@ const Home = () => {
       <section className="categories-section section">
         <div className="container">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-[1.5fr_1fr] md:h-[600px]">
-            <Link href="/shop?category=women" className="relative rounded-lg overflow-hidden block flex-1 min-h-[300px] group">
-              <div className="absolute top-0 left-0 w-full h-full">
-                <img src="https://images.unsplash.com/photo-1550639525-c97d455acf70?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Women" className="w-full h-full object-cover transition-transform duration-[600ms] ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105" />
-              </div>
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-black/0 to-40% flex flex-col justify-end p-8 text-white">
-                <h2 className="text-[2rem] mb-2">Women</h2>
-                <span className="flex items-center gap-2 text-sm font-medium opacity-0 translate-y-[10px] transition-all duration-300 ease-in group-hover:opacity-100 group-hover:translate-y-0">Shop Now <ArrowRight size={16} /></span>
-              </div>
-            </Link>
-            <div className="flex flex-col gap-4">
-              <Link href="/shop?category=men" className="relative rounded-lg overflow-hidden block flex-1 min-h-[300px] group">
-                <div className="absolute top-0 left-0 w-full h-full">
-                  <img src="https://images.unsplash.com/photo-1617137968427-85924c800a22?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Men" className="w-full h-full object-cover transition-transform duration-[600ms] ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105" />
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-black/0 to-40% flex flex-col justify-end p-8 text-white">
-                  <h2 className="text-[2rem] mb-2">Men</h2>
-                  <span className="flex items-center gap-2 text-sm font-medium opacity-0 translate-y-[10px] transition-all duration-300 ease-in group-hover:opacity-100 group-hover:translate-y-0">Shop Now <ArrowRight size={16} /></span>
-                </div>
-              </Link>
-              <Link href="/shop?category=accessories" className="relative rounded-lg overflow-hidden block flex-1 min-h-[300px] group">
-                <div className="absolute top-0 left-0 w-full h-full">
-                  <img src="https://images.unsplash.com/photo-1509319117193-57bab727e09d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Accessories" className="w-full h-full object-cover transition-transform duration-[600ms] ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105" />
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-black/0 to-40% flex flex-col justify-end p-8 text-white">
-                  <h2 className="text-[2rem] mb-2">Accessories</h2>
-                  <span className="flex items-center gap-2 text-sm font-medium opacity-0 translate-y-[10px] transition-all duration-300 ease-in group-hover:opacity-100 group-hover:translate-y-0">Shop Now <ArrowRight size={16} /></span>
-                </div>
-              </Link>
-            </div>
+            {[{ n: 'Women', c: 'women', i: 'https://images.unsplash.com/photo-1550639525-c97d455acf70?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', main: true },
+              { n: 'Men', c: 'men', i: 'https://images.unsplash.com/photo-1617137968427-85924c800a22?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' },
+              { n: 'Accessories', c: 'accessories', i: 'https://images.unsplash.com/photo-1509319117193-57bab727e09d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' }
+            ].reduce((acc, cat) => {
+              const el = (
+                <Link key={cat.c} href={`/shop?category=${cat.c}`} className="relative rounded-lg overflow-hidden block flex-1 min-h-[300px] group">
+                  <div className="absolute top-0 left-0 w-full h-full">
+                    <img src={cat.i} alt={cat.n} className="w-full h-full object-cover transition-transform duration-[600ms] ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105" />
+                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-black/0 to-40% flex flex-col justify-end p-8 text-white">
+                    <h2 className="text-[2rem] mb-2">{cat.n}</h2>
+                    <span className="flex items-center gap-2 text-sm font-medium opacity-0 translate-y-[10px] transition-all duration-300 ease-in group-hover:opacity-100 group-hover:translate-y-0">Shop Now <ArrowRight size={16} /></span>
+                  </div>
+                </Link>
+              );
+              if (cat.main) acc.push(el);
+              else {
+                if (acc.length === 1) acc.push(<div key="col" className="flex flex-col gap-4">{[el]}</div>);
+                else acc[1].props.children.push(el);
+              }
+              return acc;
+            }, [])}
           </div>
         </div>
       </section>

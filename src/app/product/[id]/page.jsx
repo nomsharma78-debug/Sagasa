@@ -215,134 +215,75 @@ const ProductDetail = () => {
           <div className="mt-6">
             <h3 className="text-[1rem] font-semibold mb-[1rem]">Key Highlights</h3>
             <div className="grid grid-cols-2 gap-[1rem]">
-              <div className="flex flex-col gap-[0.25rem]">
-                <span className="text-[0.75rem] text-[var(--color-text-muted)] uppercase tracking-[0.05em]">Style</span>
-                <span className="text-[0.875rem] font-semibold">Straight Leg</span>
-              </div>
-              <div className="flex flex-col gap-[0.25rem]">
-                <span className="text-[0.75rem] text-[var(--color-text-muted)] uppercase tracking-[0.05em]">Fit</span>
-                <span className="text-[0.875rem] font-semibold">High-Rise</span>
-              </div>
-              <div className="flex flex-col gap-[0.25rem]">
-                <span className="text-[0.75rem] text-[var(--color-text-muted)] uppercase tracking-[0.05em]">Closure</span>
-                <span className="text-[0.875rem] font-semibold">Button & Zip Fly</span>
-              </div>
-              <div className="flex flex-col gap-[0.25rem]">
-                <span className="text-[0.75rem] text-[var(--color-text-muted)] uppercase tracking-[0.05em]">Occasion</span>
-                <span className="text-[0.875rem] font-semibold">Casual Wear</span>
-              </div>
-              <div className="flex flex-col gap-[0.25rem]">
-                <span className="text-[0.75rem] text-[var(--color-text-muted)] uppercase tracking-[0.05em]">Pockets</span>
-                <span className="text-[0.875rem] font-semibold">5-Pocket Design</span>
-              </div>
-              <div className="flex flex-col gap-[0.25rem]">
-                <span className="text-[0.75rem] text-[var(--color-text-muted)] uppercase tracking-[0.05em]">Wash Care</span>
-                <span className="text-[0.875rem] font-semibold">Machine Wash Cold</span>
-              </div>
+              {[
+                { l: 'Style', v: 'Straight Leg' }, { l: 'Fit', v: 'High-Rise' },
+                { l: 'Closure', v: 'Button & Zip Fly' }, { l: 'Occasion', v: 'Casual Wear' },
+                { l: 'Pockets', v: '5-Pocket Design' }, { l: 'Wash Care', v: 'Machine Wash Cold' }
+              ].map(h => (
+                <div key={h.l} className="flex flex-col gap-[0.25rem]">
+                  <span className="text-[0.75rem] text-[var(--color-text-muted)] uppercase tracking-[0.05em]">{h.l}</span>
+                  <span className="text-[0.875rem] font-semibold">{h.v}</span>
+                </div>
+              ))}
             </div>
           </div>
-
 
           {/* Accordions */}
           <div className="flex flex-col mt-[1.5rem]">
-            {/* Description */}
-            <div className="border-b border-[var(--color-border)] last:border-b-0">
-              <button 
-                className="w-full flex justify-between items-center py-[1.25rem] px-0 bg-none border-none text-[1rem] font-medium cursor-pointer text-[var(--color-foreground)]"
-                onClick={() => toggleAccordion('description')}
-              >
-                <span>Product Description</span>
-                {openAccordions.description ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-              </button>
-              <AnimatePresence>
-                {openAccordions.description && (
-                  <motion.div 
-                    className="overflow-hidden text-[var(--color-text-muted)] text-[0.875rem] leading-[1.6]"
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                  >
-                    <p className="pb-[1rem]">{product.description}</p>
-                    <p className="pb-[1rem]" style={{ marginTop: '1rem' }}>Designed with precision and crafted from the finest materials, this piece embodies the Sagasa commitment to modern luxury and everyday wearability.</p>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            {/* Details & Composition */}
-            <div className="border-b border-[var(--color-border)] last:border-b-0">
-              <button 
-                className="w-full flex justify-between items-center py-[1.25rem] px-0 bg-none border-none text-[1rem] font-medium cursor-pointer text-[var(--color-foreground)]"
-                onClick={() => toggleAccordion('details')}
-              >
-                <span>Details & Composition</span>
-                {openAccordions.details ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-              </button>
-              <AnimatePresence>
-                {openAccordions.details && (
-                  <motion.div 
-                    className="overflow-hidden text-[var(--color-text-muted)] text-[0.875rem] leading-[1.6]"
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                  >
-                    <ul className="pb-[1rem]" style={{ paddingLeft: '1.2rem', color: 'var(--color-text-muted)' }}>
-                      <li>Signature Sagasa hardware detailing</li>
-                      <li>Durable construction for longevity</li>
-                      <li>Sourced from sustainable partners</li>
-                    </ul>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            {/* Shipping & Returns */}
-            <div className="border-b border-[var(--color-border)] last:border-b-0">
-              <button 
-                className="w-full flex justify-between items-center py-[1.25rem] px-0 bg-none border-none text-[1rem] font-medium cursor-pointer text-[var(--color-foreground)]"
-                onClick={() => toggleAccordion('shipping')}
-              >
-                <div style={{display:'flex', alignItems:'center', gap:'0.75rem'}}>
-                  <span className="text-[1.5rem] bg-[var(--color-surface)] rounded-full w-[40px] h-[40px] flex items-center justify-center">🔄</span>
-                  <div style={{display:'flex', flexDirection:'column', alignItems:'flex-start'}}>
-                    <span>15 Days Returns & Exchange</span>
-                    <span style={{fontSize:'0.75rem', color:'var(--color-text-muted)', fontWeight:400}}>Know about return & exchange policy</span>
+            {[
+              { 
+                id: 'description', title: 'Product Description',
+                content: <><p className="pb-[1rem]">{product.description}</p><p className="pb-[1rem] mt-[1rem]">Designed with precision and crafted from the finest materials, this piece embodies the Sagasa commitment to modern luxury and everyday wearability.</p></>
+              },
+              {
+                id: 'details', title: 'Details & Composition',
+                content: <ul className="pb-[1rem] pl-[1.2rem] text-[var(--color-text-muted)]"><li>Signature Sagasa hardware detailing</li><li>Durable construction for longevity</li><li>Sourced from sustainable partners</li></ul>
+              },
+              {
+                id: 'shipping', 
+                title: (
+                  <div className="flex items-center gap-[0.75rem]">
+                    <span className="text-[1.5rem] bg-[var(--color-surface)] rounded-full w-[40px] h-[40px] flex items-center justify-center">🔄</span>
+                    <div className="flex flex-col items-start"><span className="text-[1rem]">15 Days Returns & Exchange</span><span className="text-[0.75rem] text-[var(--color-text-muted)] font-normal">Know about return & exchange policy</span></div>
                   </div>
-                </div>
-                {openAccordions.shipping ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-              </button>
-              <AnimatePresence>
-                {openAccordions.shipping && (
-                  <motion.div 
-                    className="overflow-hidden text-[var(--color-text-muted)] text-[0.875rem] leading-[1.6]"
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                  >
-                    <p className="pb-[1rem]"><strong>Standard Shipping:</strong> 3-5 business days.</p>
-                    <p className="pb-[1rem]"><strong>Express Shipping:</strong> 1-2 business days.</p>
-                    <p className="pb-[1rem]" style={{ marginTop: '0.5rem' }}>We accept returns within 15 days of the delivery date. Items must be unworn and in original condition with all tags attached.</p>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
+                ),
+                content: <><p className="pb-[1rem]"><strong>Standard Shipping:</strong> 3-5 business days.</p><p className="pb-[1rem]"><strong>Express Shipping:</strong> 1-2 business days.</p><p className="pb-[1rem] mt-[0.5rem]">We accept returns within 15 days of the delivery date. Items must be unworn and in original condition with all tags attached.</p></>
+              }
+            ].map(acc => (
+              <div key={acc.id} className="border-b border-[var(--color-border)] last:border-b-0">
+                <button 
+                  className="w-full flex justify-between items-center py-[1.25rem] px-0 bg-none border-none text-[1rem] font-medium cursor-pointer text-[var(--color-foreground)]"
+                  onClick={() => toggleAccordion(acc.id)}
+                >
+                  {typeof acc.title === 'string' ? <span>{acc.title}</span> : acc.title}
+                  {openAccordions[acc.id] ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                </button>
+                <AnimatePresence>
+                  {openAccordions[acc.id] && (
+                    <motion.div 
+                      className="overflow-hidden text-[var(--color-text-muted)] text-[0.875rem] leading-[1.6]"
+                      initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}
+                    >
+                      {acc.content}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ))}
           </div>
-
 
           {/* Trust Badges */}
           <div className="flex justify-between items-start mt-[1.5rem]">
-            <div className="flex flex-col items-center text-center gap-[0.5rem] flex-1">
-              <div className="w-[48px] h-[48px] rounded-full border border-dashed border-[var(--color-border)] flex items-center justify-center text-[1.5rem] text-[var(--color-foreground)]">✓</div>
-              <span className="text-[0.65rem] font-semibold text-[var(--color-text-muted)] tracking-[0.05em] uppercase">100% GENUINE<br/>PRODUCT</span>
-            </div>
-            <div className="flex flex-col items-center text-center gap-[0.5rem] flex-1">
-              <div className="w-[48px] h-[48px] rounded-full border border-dashed border-[var(--color-border)] flex items-center justify-center text-[1.5rem] text-[var(--color-foreground)]">💳</div>
-              <span className="text-[0.65rem] font-semibold text-[var(--color-text-muted)] tracking-[0.05em] uppercase">100% SECURE<br/>PAYMENT</span>
-            </div>
-            <div className="flex flex-col items-center text-center gap-[0.5rem] flex-1">
-              <div className="w-[48px] h-[48px] rounded-full border border-dashed border-[var(--color-border)] flex items-center justify-center text-[1.5rem] text-[var(--color-foreground)]">🔄</div>
-              <span className="text-[0.65rem] font-semibold text-[var(--color-text-muted)] tracking-[0.05em] uppercase">EASY RETURNS &<br/>INSTANT REFUNDS</span>
-            </div>
+            {[
+              { i: '✓', t: <>100% GENUINE<br/>PRODUCT</> },
+              { i: '💳', t: <>100% SECURE<br/>PAYMENT</> },
+              { i: '🔄', t: <>EASY RETURNS &<br/>INSTANT REFUNDS</> }
+            ].map((b, idx) => (
+              <div key={idx} className="flex flex-col items-center text-center gap-[0.5rem] flex-1">
+                <div className="w-[48px] h-[48px] rounded-full border border-dashed border-[var(--color-border)] flex items-center justify-center text-[1.5rem] text-[var(--color-foreground)]">{b.i}</div>
+                <span className="text-[0.65rem] font-semibold text-[var(--color-text-muted)] tracking-[0.05em] uppercase">{b.t}</span>
+              </div>
+            ))}
           </div>
 
 
