@@ -120,51 +120,36 @@ const Login = () => {
                 </h1>
                 
                 <div className="flex flex-col gap-4 xl:gap-5">
-                  <div className="flex items-center gap-4">
-                    <div className="w-[40px] h-[40px] xl:w-[45px] xl:h-[45px] rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/20">
-                      <Leaf size={18} className="text-white" strokeWidth={1.5} />
+                  {[
+                    { icon: Leaf, text: "Premium 100%<br/>Cotton Denim" },
+                    { icon: Shirt, text: "Tailored,<br/>Modern Fits" },
+                    { icon: Recycle, text: "Sustainably<br/>Crafted" }
+                  ].map((item, idx) => (
+                    <div key={idx} className="flex items-center gap-4">
+                      <div className="w-[40px] h-[40px] xl:w-[45px] xl:h-[45px] rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/20">
+                        <item.icon size={18} className="text-white" strokeWidth={1.5} />
+                      </div>
+                      <span className="font-medium text-[0.95rem] xl:text-[1rem] text-white/90 leading-tight" dangerouslySetInnerHTML={{ __html: item.text }} />
                     </div>
-                    <span className="font-medium text-[0.95rem] xl:text-[1rem] text-white/90 leading-tight">Premium 100%<br/>Cotton Denim</span>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="w-[40px] h-[40px] xl:w-[45px] xl:h-[45px] rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/20">
-                      <Shirt size={18} className="text-white" strokeWidth={1.5} />
-                    </div>
-                    <span className="font-medium text-[0.95rem] xl:text-[1rem] text-white/90 leading-tight">Tailored,<br/>Modern Fits</span>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="w-[40px] h-[40px] xl:w-[45px] xl:h-[45px] rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/20">
-                      <Recycle size={18} className="text-white" strokeWidth={1.5} />
-                    </div>
-                    <span className="font-medium text-[0.95rem] xl:text-[1rem] text-white/90 leading-tight">Sustainably<br/>Crafted</span>
-                  </div>
+                  ))}
                 </div>
               </div>
             </div>
             
-            {/* Bottom Features */}
             <div className="h-[12%] w-full flex items-center justify-around px-4 xl:px-6 bg-[#F3F1ED]">
-              <div className="flex items-center gap-2 xl:gap-3">
-                <ShieldCheck size={22} className="text-[#333] shrink-0" strokeWidth={1.5} />
-                <div className="flex flex-col">
-                  <span className="text-[0.75rem] xl:text-[0.8rem] font-bold text-[#333] leading-tight">Secure Checkout</span>
-                  <span className="text-[0.65rem] xl:text-[0.7rem] text-[#888]">Your data is protected</span>
+              {[
+                { icon: ShieldCheck, title: "Secure Checkout", desc: "Your data is protected" },
+                { icon: Truck, title: "Fast Delivery", desc: "Across India" },
+                { icon: RefreshCw, title: "Easy Returns", desc: "Hassle free" }
+              ].map((item, idx) => (
+                <div key={idx} className="flex items-center gap-2 xl:gap-3">
+                  <item.icon size={22} className="text-[#333] shrink-0" strokeWidth={1.5} />
+                  <div className="flex flex-col">
+                    <span className="text-[0.75rem] xl:text-[0.8rem] font-bold text-[#333] leading-tight">{item.title}</span>
+                    <span className="text-[0.65rem] xl:text-[0.7rem] text-[#888]">{item.desc}</span>
+                  </div>
                 </div>
-              </div>
-              <div className="flex items-center gap-2 xl:gap-3">
-                <Truck size={22} className="text-[#333] shrink-0" strokeWidth={1.5} />
-                <div className="flex flex-col">
-                  <span className="text-[0.75rem] xl:text-[0.8rem] font-bold text-[#333] leading-tight">Fast Delivery</span>
-                  <span className="text-[0.65rem] xl:text-[0.7rem] text-[#888]">Across India</span>
-                </div>
-              </div>
-              <div className="flex items-center gap-2 xl:gap-3">
-                <RefreshCw size={22} className="text-[#333] shrink-0" strokeWidth={1.5} />
-                <div className="flex flex-col">
-                  <span className="text-[0.75rem] xl:text-[0.8rem] font-bold text-[#333] leading-tight">Easy Returns</span>
-                  <span className="text-[0.65rem] xl:text-[0.7rem] text-[#888]">Hassle free</span>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
 

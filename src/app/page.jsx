@@ -72,18 +72,16 @@ const Home = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 1, duration: 0.8 }}
           >
-            <div className="flex items-center gap-2">
-              <CheckCircle size={18} strokeWidth={1.5} />
-              <span className="text-[0.8rem] font-medium">Premium Quality</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <RefreshCcw size={18} strokeWidth={1.5} />
-              <span className="text-[0.8rem] font-medium">Easy Returns</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Globe size={18} strokeWidth={1.5} />
-              <span className="text-[0.8rem] font-medium">Worldwide Shipping</span>
-            </div>
+            {[
+              { icon: CheckCircle, label: "Premium Quality" },
+              { icon: RefreshCcw, label: "Easy Returns" },
+              { icon: Globe, label: "Worldwide Shipping" }
+            ].map((ft, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <ft.icon size={18} strokeWidth={1.5} />
+                <span className="text-[0.8rem] font-medium">{ft.label}</span>
+              </div>
+            ))}
           </motion.div>
         </div>
 
