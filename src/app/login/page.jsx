@@ -34,8 +34,10 @@ const Login = () => {
   const [identifierError, setIdentifierError] = useState('');
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [otpError, setOtpError] = useState('');
+  const [deliveryError, setDeliveryError] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [deliveryDetails, setDeliveryDetails] = useState({
-    fullName: '', email: '', address1: '', address2: '', city: '', state: '', pincode: ''
+    fullName: '', gender: '', email: '', address1: '', address2: '', city: '', state: '', pincode: '', zone: ''
   });
 
   // Handle 3-second delay error for incomplete valid numbers
@@ -52,12 +54,70 @@ const Login = () => {
   }, [identifier, step]);
 
   const handleDeliveryChange = (e) => {
-    setDeliveryDetails(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    const { name, value } = e.target;
+    // For pincode, ensure only numbers and max length 6
+    if (name === 'pincode') {
+      const numericValue = value.replace(/\D/g, '');
+      if (numericValue.length <= 6) {
+        setDeliveryDetails(prev => ({ ...prev, [name]: numericValue }));
+      }
+      return;
+    }
+    if (name === 'email') {
+      setEmailError('');
+    }
+    setDeliveryError('');
+    setDeliveryDetails(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleIdentifierSubmit = (e) => {
+  // Fetch precise area details when pincode is fully entered
+  useEffect(() => {
+    const fetchPincodeDetails = async () => {
+      if (deliveryDetails.pincode.length === 6) {
+        try {
+          const response = await fetch(`/api/pincode?pincode=${deliveryDetails.pincode}`);
+          if (response.ok) {
+            const data = await response.json();
+            setDeliveryDetails(prev => ({
+              ...prev,
+              city: prev.city || data.city || '',
+              state: prev.state || data.state || '',
+              zone: data.zone || ''
+            }));
+          } else {
+            setDeliveryDetails(prev => ({ ...prev, zone: 'Invalid PIN Code' }));
+          }
+        } catch (error) {
+          console.warn("Pincode fetch failed (likely network/adblocker):", error);
+          setDeliveryDetails(prev => ({ ...prev, zone: '' }));
+        }
+      } else if (deliveryDetails.pincode.length === 0) {
+        setDeliveryDetails(prev => ({ ...prev, zone: '' }));
+      }
+    };
+
+    fetchPincodeDetails();
+  }, [deliveryDetails.pincode]);
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleIdentifierSubmit = async (e) => {
     e.preventDefault();
-    if (identifier.length >= 10) setStep('otp');
+    if (identifier.length >= 10) {
+      setIsLoading(true);
+      try {
+        await fetch('/api/auth/send-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone: identifier })
+        });
+        setStep('otp');
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setIsLoading(false);
+      }
+    }
   };
 
   const handleOtpChange = (index, value) => {
@@ -78,39 +138,111 @@ const Login = () => {
     }
   };
 
-  const handleOtpSubmit = (e) => {
+  const handleOtpSubmit = async (e) => {
     e.preventDefault();
     const otpValue = otp.join('');
     if (otpValue.length === 6) {
-      if (otpValue === '123456') {
-        setOtpError('');
-        setStep('delivery_details');
-      } else {
-        setOtpError('Invalid OTP. Please try again.');
-        setOtp(['', '', '', '', '', '']);
-        document.getElementById('otp-0')?.focus();
+      setIsLoading(true);
+      try {
+        const res = await fetch('/api/auth/verify-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone: identifier, otp: otpValue })
+        });
+        
+        if (res.ok) {
+          const data = await res.json();
+          setOtpError('');
+          
+          if (typeof window !== 'undefined') {
+            localStorage.setItem('sagasa_auth', '1');
+          }
+
+          if (data.user.role === 'admin') {
+            window.dispatchEvent(new Event('auth-change'));
+            router.push('/admin');
+          } else {
+            if (!data.user.name) {
+              setStep('delivery_details');
+            } else {
+              window.dispatchEvent(new Event('auth-change'));
+              router.push('/profile');
+            }
+          }
+        } else {
+          const errorData = await res.json();
+          setOtpError(errorData.error || 'Invalid OTP');
+          setOtp(['', '', '', '', '', '']);
+          document.getElementById('otp-0')?.focus();
+        }
+      } catch (err) {
+        setOtpError('Network error. Please try again.');
+      } finally {
+        setIsLoading(false);
       }
     } else {
       setOtpError('Please enter complete OTP.');
     }
   };
 
-  const handleDeliverySubmit = (e) => {
+  const handleDeliverySubmit = async (e) => {
     e.preventDefault();
-    localStorage.setItem('isAuthenticated', 'true');
-    router.push('/profile');
+    
+    // Validate email is @gmail.com
+    const emailVal = deliveryDetails.email.trim().toLowerCase();
+    if (!emailVal.endsWith('@gmail.com') || emailVal === '@gmail.com') {
+      setEmailError('Only Gmail addresses are accepted (e.g., name@gmail.com)');
+      return;
+    }
+    if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(emailVal)) {
+      setEmailError('Please enter a valid Gmail address');
+      return;
+    }
+    
+    setIsLoading(true);
+    setDeliveryError('');
+    try {
+      const res = await fetch('/api/user/profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: deliveryDetails.fullName,
+          email: emailVal,
+          gender: deliveryDetails.gender || 'Prefer not to say',
+          address: {
+            street: deliveryDetails.address1 + (deliveryDetails.address2 ? `, ${deliveryDetails.address2}` : ''),
+            city: deliveryDetails.city,
+            state: deliveryDetails.state,
+            pincode: deliveryDetails.pincode
+          }
+        })
+      });
+      if (res.ok) {
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('sagasa_auth', '1');
+        }
+        window.dispatchEvent(new Event('auth-change'));
+        router.push('/profile');
+      } else {
+        setDeliveryError('Failed to save details. Please check your inputs.');
+      }
+    } catch(err) {
+      setDeliveryError('Network error. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <div className="h-screen bg-[#FCFBF8] flex flex-col overflow-hidden">
       {/* Main Content Area filling exact remaining viewport */}
       <div className="flex-1 w-full flex items-center justify-center p-4 lg:p-8 min-h-0">
-        <div className="w-full h-full max-h-[720px] max-w-[1400px] grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] gap-6 lg:gap-8">
+        <div className="w-full h-full max-h-[600px] max-w-[1400px] grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] gap-6 lg:gap-8 mt-[55px]">
           
           {/* LEFT CARD (Marketing) */}
           <div className="hidden lg:flex flex-col bg-[#F3F1ED] rounded-[24px] overflow-hidden shadow-sm h-full">
             {/* Top Image Section */}
-            <div className="relative h-[88%] w-full">
+            <div className="relative h-[80%] w-full">
               <Image src="/login-couple.jpg" alt="Sagasa Standard" fill priority className="object-cover object-[center_30%]" />
               <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent pointer-events-none"></div>
               
@@ -136,7 +268,7 @@ const Login = () => {
               </div>
             </div>
             
-            <div className="h-[12%] w-full flex items-center justify-around px-4 xl:px-6 bg-[#F3F1ED]">
+            <div className="h-[20%] w-full flex items-center justify-around px-4 xl:px-6 bg-[#F3F1ED]">
               {[
                 { icon: ShieldCheck, title: "Secure Checkout", desc: "Your data is protected" },
                 { icon: Truck, title: "Fast Delivery", desc: "Across India" },
@@ -156,11 +288,13 @@ const Login = () => {
           {/* RIGHT CARD (Form Flow) */}
           <div className="bg-white rounded-[24px] shadow-sm border border-[#EAEAEA] p-6 sm:p-8 lg:p-10 h-full overflow-y-auto">
             {/* Promo Banner */}
-            <div className="w-full bg-[#F5F3EF] rounded-lg p-3.5 flex items-center gap-3 mb-8 border border-[#EAEAEA] shrink-0">
-              <Tag size={18} className="text-[#A6937A]" />
-              <span className="font-bold text-[#333] tracking-wide uppercase text-xs shrink-0">NEW</span>
-              <span className="text-[#666] text-[0.85rem]">Get 10% off on your first login or registration!</span>
-            </div>
+            {step !== 'delivery_details' && (
+              <div className="w-full bg-[#F5F3EF] rounded-lg p-3.5 flex items-center gap-3 mb-8 border border-[#EAEAEA] shrink-0">
+                <Tag size={18} className="text-[#A6937A]" />
+                <span className="font-bold text-[#333] tracking-wide uppercase text-xs shrink-0">NEW</span>
+                <span className="text-[#666] text-[0.85rem]">Get 10% off on your first login or registration!</span>
+              </div>
+            )}
           
           <AnimatePresence mode="wait">
             
@@ -304,9 +438,43 @@ const Login = () => {
                     <div className="flex-1 h-[1px] bg-[#EAEAEA]"></div>
                   </div>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr_1.5fr] gap-4">
                     <IconInput icon={User} placeholder="Full Name" name="fullName" value={deliveryDetails.fullName} onChange={handleDeliveryChange} required />
-                    <IconInput icon={Mail} placeholder="Email Address" name="email" type="email" value={deliveryDetails.email} onChange={handleDeliveryChange} required />
+                    
+                    <div className="relative w-full">
+                      <select 
+                        name="gender" 
+                        value={deliveryDetails.gender} 
+                        onChange={handleDeliveryChange} 
+                        required 
+                        className={`w-full pl-4 pr-11 py-3.5 rounded-lg border border-[#EAEAEA] text-[0.95rem] focus:outline-none focus:border-[#A6937A] appearance-none bg-transparent relative z-10 cursor-pointer ${deliveryDetails.gender ? 'text-[#333]' : 'text-[#A0A0A0]'}`}
+                      >
+                        <option value="" disabled>Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                        <option value="Prefer not to say">Prefer not to say</option>
+                      </select>
+                      <ChevronDown size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#A0A0A0] z-0" />
+                    </div>
+
+                    <div className="relative w-full">
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#A0A0A0]">
+                        <Mail size={18} strokeWidth={1.5} />
+                      </div>
+                      <input 
+                        type="email"
+                        name="email"
+                        placeholder="Email Address (Gmail only)"
+                        value={deliveryDetails.email}
+                        onChange={handleDeliveryChange}
+                        required
+                        className={`w-full pl-11 pr-4 py-3.5 rounded-lg border ${emailError ? 'border-red-400 bg-red-50/30' : 'border-[#EAEAEA]'} text-[#333] text-[0.95rem] focus:outline-none focus:border-[#A6937A] transition-colors placeholder:text-[#A0A0A0]`}
+                      />
+                      {emailError && (
+                        <p className="text-red-500 text-xs font-medium mt-1 pl-1">{emailError}</p>
+                      )}
+                    </div>
                   </div>
 
                   {/* Shipping Address Divider */}
@@ -319,7 +487,7 @@ const Login = () => {
                   <IconInput icon={MapPin} placeholder="Address Line 1" name="address1" value={deliveryDetails.address1} onChange={handleDeliveryChange} required />
                   <IconInput placeholder="Address Line 2 (Optional)" name="address2" value={deliveryDetails.address2} onChange={handleDeliveryChange} />
                   
-                  <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr_1fr] gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <IconInput icon={Building} placeholder="City" name="city" value={deliveryDetails.city} onChange={handleDeliveryChange} required />
                     <div className="relative w-full">
                       <select 
@@ -371,7 +539,13 @@ const Login = () => {
                       <ChevronDown size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#A0A0A0] z-0" />
                     </div>
                     <IconInput icon={Hash} placeholder="PIN Code" name="pincode" value={deliveryDetails.pincode} onChange={handleDeliveryChange} required />
+                    <IconInput icon={MapPin} placeholder="Area / District" name="zone" value={deliveryDetails.zone} readOnly className="w-full pl-11 pr-4 py-3.5 rounded-lg border border-[#EAEAEA] text-[#333] text-[0.95rem] bg-[#F9F9F9] focus:outline-none cursor-not-allowed" />
                   </div>
+
+
+                  {deliveryError && (
+                    <p className="text-red-500 text-sm font-medium text-center bg-red-50 border border-red-200 rounded-lg py-3 px-4 mt-2">{deliveryError}</p>
+                  )}
 
                   <button type="submit" className="w-full bg-[#222] text-white py-4 rounded-lg mt-6 font-medium text-[0.95rem] flex items-center justify-center gap-2 transition-colors hover:bg-[#333]">
                     Save Address <ArrowRight size={18} />

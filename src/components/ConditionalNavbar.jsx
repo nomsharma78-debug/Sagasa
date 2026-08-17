@@ -12,7 +12,7 @@ export default function ConditionalNavbar() {
   return (
     <>
       <Navbar />
-      {pathname !== '/' && <div style={{ height: 'var(--header-height)' }} />}
+      {pathname !== '/' && pathname !== '/login' && <div style={{ height: 'var(--header-height)' }} />}
     </>
   );
 }

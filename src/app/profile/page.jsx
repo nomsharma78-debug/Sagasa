@@ -1,130 +1,140 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { useRouter } from 'next/navigation';
-import { LogOut, Package, User, Settings } from 'lucide-react';
-import Button from '@/components/Button';
+import { useState, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Package, Heart, MapPin, CreditCard, User, Settings, Bell, ShieldCheck, LogOut, Menu, X } from 'lucide-react';
 
-const UserProfile = () => {
+import OverviewTab from '@/components/profile/OverviewTab';
+import OrdersTab from '@/components/profile/OrdersTab';
+import WishlistTab from '@/components/profile/WishlistTab';
+import AddressesTab from '@/components/profile/AddressesTab';
+import PaymentMethodsTab from '@/components/profile/PaymentMethodsTab';
+import ProfileDetailsTab from '@/components/profile/ProfileDetailsTab';
+import PreferencesTab from '@/components/profile/PreferencesTab';
+import NotificationsTab from '@/components/profile/NotificationsTab';
+import SecurityTab from '@/components/profile/SecurityTab';
+import SagasaLoader from '@/components/SagasaLoader';
+
+const TABS = {
+  Overview: OverviewTab,
+  Orders: OrdersTab,
+  Wishlist: WishlistTab,
+  Addresses: AddressesTab,
+  'Payment Methods': PaymentMethodsTab,
+  'Profile Details': ProfileDetailsTab,
+  Preferences: PreferencesTab,
+  Notifications: NotificationsTab,
+  Security: SecurityTab
+};
+
+const NAV = {
+  ACCOUNT: [{ id: 'Overview', icon: User }, { id: 'Orders', icon: Package }, { id: 'Wishlist', icon: Heart }, { id: 'Addresses', icon: MapPin }, { id: 'Payment Methods', icon: CreditCard }],
+  PERSONAL: [{ id: 'Profile Details', icon: User }, { id: 'Preferences', icon: Settings }, { id: 'Notifications', icon: Bell }, { id: 'Security', icon: ShieldCheck }]
+};
+
+function ProfileContent({ profile, setProfile }) {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState('orders');
+  const searchParams = useSearchParams();
+  const tabParam = searchParams.get('tab');
+  const [activeTab, setActiveTab] = useState(() => (tabParam && TABS[tabParam] ? tabParam : 'Overview'));
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    // Basic auth check simulation
-    const isAuth = localStorage.getItem('isAuthenticated');
-    if (!isAuth) {
-      router.push('/login');
-    }
-  }, [router]);
+    setActiveTab(tabParam && TABS[tabParam] ? tabParam : 'Overview');
+  }, [tabParam]);
 
-  const handleLogout = () => {
-    localStorage.removeItem('isAuthenticated');
+  const handleTabChange = (tabId) => {
+    setActiveTab(tabId);
+    setIsMobileMenuOpen(false);
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href);
+      tabId === 'Overview' ? url.searchParams.delete('tab') : url.searchParams.set('tab', tabId);
+      window.history.replaceState({}, '', url.toString());
+    }
+  };
+
+  useEffect(() => {
+    fetch('/api/user/profile')
+      .then(res => res.ok ? res.json() : router.push('/login'))
+      .then(data => data && !data.error && setProfile(data))
+      .catch(() => router.push('/login'));
+  }, [router, setProfile]);
+
+  const handleLogout = async () => {
+    await fetch('/api/auth/logout', { method: 'POST' });
+    if (typeof window !== 'undefined') localStorage.removeItem('sagasa_auth');
+    window.dispatchEvent(new Event('auth-change'));
     router.push('/login');
   };
 
-  const tabs = [
-    { id: 'orders', label: 'Order History', icon: <Package size={18} /> },
-    { id: 'profile', label: 'Profile Details', icon: <User size={18} /> },
-    { id: 'settings', label: 'Account Settings', icon: <Settings size={18} /> }
-  ];
+  const ActiveComponent = TABS[activeTab] || OverviewTab;
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="page-container container section"
-    >
-      <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '3rem' }}>
-        <div>
-          <h1 style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>My Account</h1>
-          <p style={{ color: 'var(--color-text-muted)' }}>Welcome back, Alex.</p>
-        </div>
-        <button 
-          onClick={handleLogout}
-          style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'none', border: 'none', color: 'var(--color-text-muted)', cursor: 'pointer' }}
-        >
-          <LogOut size={18} /> Sign Out
-        </button>
-      </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '2rem' }}>
-        {/* Mobile Tab Navigation */}
-        <div style={{ display: 'flex', overflowX: 'auto', gap: '1rem', borderBottom: '1px solid var(--color-border)', paddingBottom: '1rem' }}>
-          {tabs.map(tab => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                background: 'none',
-                border: 'none',
-                padding: '0.5rem 1rem',
-                cursor: 'pointer',
-                whiteSpace: 'nowrap',
-                fontWeight: '500',
-                color: activeTab === tab.id ? 'var(--color-foreground)' : 'var(--color-text-muted)',
-                borderBottom: activeTab === tab.id ? '2px solid var(--color-foreground)' : '2px solid transparent',
-                marginBottom: '-1rem'
-              }}
-            >
-              {tab.icon} {tab.label}
-            </button>
-          ))}
+    <div className="bg-[#FAF9F6] min-h-screen text-[#222] font-[family-name:var(--font-body)]">
+      {isMobileMenuOpen && <div className="fixed inset-0 bg-black/20 z-40 lg:hidden" onClick={() => setIsMobileMenuOpen(false)} />}
+      <div className="container mx-auto px-4 py-8 lg:py-12 flex flex-col lg:flex-row gap-8 lg:gap-12 relative">
+        <div className="lg:hidden flex items-center justify-between mb-4">
+          <h1 className="text-2xl font-[family-name:var(--font-display)] font-medium">My Account</h1>
+          <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2 bg-white rounded-lg border border-[#EAEAEA]">
+            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
         </div>
 
-        {/* Tab Content */}
-        <motion.div 
-          key={activeTab}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-          style={{ minHeight: '300px' }}
-        >
-          {activeTab === 'orders' && (
-            <div>
-              <h2 style={{ fontSize: '1.5rem', marginBottom: '1.5rem' }}>Recent Orders</h2>
-              <div style={{ background: 'var(--color-surface)', borderRadius: '8px', padding: '2rem', textAlign: 'center', color: 'var(--color-text-muted)' }}>
-                <Package size={48} style={{ margin: '0 auto 1rem', opacity: 0.5 }} />
-                <p>You haven't placed any orders yet.</p>
-                <div style={{ marginTop: '1.5rem' }}>
-                  <Button to="/shop">Start Shopping</Button>
-                </div>
-              </div>
-            </div>
-          )}
+        <aside className={`fixed lg:static inset-y-0 left-0 w-[260px] bg-[#FAF9F6] lg:bg-transparent z-50 transform transition-transform duration-300 ${
+          isMobileMenuOpen ? 'translate-x-0 border-r border-[#EAEAEA] shadow-2xl p-6 lg:p-0' : '-translate-x-full lg:translate-x-0'
+        } lg:flex lg:flex-col shrink-0`}>
+          <div className="lg:hidden flex justify-between items-center mb-8">
+            <span className="font-[family-name:var(--font-display)] font-medium text-xl">Menu</span>
+            <button onClick={() => setIsMobileMenuOpen(false)}><X size={20} /></button>
+          </div>
 
-          {activeTab === 'profile' && (
-            <div>
-              <h2 style={{ fontSize: '1.5rem', marginBottom: '1.5rem' }}>Profile Details</h2>
-              <div style={{ background: 'var(--color-surface)', borderRadius: '8px', padding: '2rem', display: 'flex', alignItems: 'center', gap: '2rem' }}>
-                <div style={{ width: '100px', height: '100px', borderRadius: '50%', background: 'var(--color-border)', overflow: 'hidden' }}>
-                  <img src="https://ui-avatars.com/api/?name=Alex+Doe&background=random" alt="Avatar" style={{ width: '100%', height: '100%' }} />
-                </div>
-                <div>
-                  <h3 style={{ fontSize: '1.25rem', marginBottom: '0.25rem' }}>Alex Doe</h3>
-                  <p style={{ color: 'var(--color-text-muted)', marginBottom: '1rem' }}>alex.doe@example.com</p>
-                  <Button variant="outline">Change Avatar</Button>
-                </div>
+          <div className="space-y-8">
+            {Object.entries(NAV).map(([category, items]) => (
+              <div key={category}>
+                <h3 className="text-[10px] font-bold text-[#888] tracking-widest uppercase mb-3 pl-4">{category}</h3>
+                <nav className="flex flex-col gap-1">
+                  {items.map(({ id, icon: Icon }) => (
+                    <button
+                      key={id}
+                      onClick={() => handleTabChange(id)}
+                      className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors w-full text-left ${
+                        activeTab === id ? 'bg-white shadow-sm text-[#222]' : 'text-[#666] hover:bg-[#F0EFEA] hover:text-[#222]'
+                      }`}
+                    >
+                      <Icon size={18} strokeWidth={activeTab === id ? 2 : 1.5} className={activeTab === id ? 'text-[#222]' : 'text-[#888]'} />
+                      {id}
+                    </button>
+                  ))}
+                </nav>
               </div>
-            </div>
-          )}
+            ))}
+          </div>
 
-          {activeTab === 'settings' && (
-            <div>
-              <h2 style={{ fontSize: '1.5rem', marginBottom: '1.5rem' }}>Account Settings</h2>
-              <div style={{ background: 'var(--color-surface)', borderRadius: '8px', padding: '2rem' }}>
-                <p style={{ color: 'var(--color-text-muted)' }}>Settings form would go here (Change password, email preferences, address book).</p>
-              </div>
-            </div>
-          )}
-        </motion.div>
+          <button onClick={handleLogout} className="flex items-center gap-3 px-4 py-2.5 mt-8 text-sm font-medium text-[#666] hover:text-[#222] transition-colors w-full text-left">
+            <LogOut size={18} strokeWidth={1.5} className="text-[#888]" />
+            Sign Out
+          </button>
+        </aside>
+
+        <main className="flex-1 max-w-[1000px] pb-12">
+          {profile && <ActiveComponent setActiveTab={handleTabChange} profile={profile} setProfile={setProfile} />}
+        </main>
       </div>
-    </motion.div>
+    </div>
   );
-};
+}
 
-export default UserProfile;
+export default function UserProfile() {
+  const [profile, setProfile] = useState(null);
+
+  return (
+    <>
+      {!profile && <SagasaLoader />}
+      <div className={!profile ? "invisible h-0 overflow-hidden" : ""}>
+        <Suspense fallback={null}>
+          <ProfileContent profile={profile} setProfile={setProfile} />
+        </Suspense>
+      </div>
+    </>
+  );
+}

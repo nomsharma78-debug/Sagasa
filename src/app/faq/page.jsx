@@ -1,7 +1,9 @@
-"use client";
-
-import { motion } from 'framer-motion';
 import Accordion from '@/components/Accordion';
+
+export const metadata = {
+  title: 'FAQ | Sagasa',
+  description: 'Frequently Asked Questions about Sagasa returns, shipping, and care instructions.',
+};
 
 const faqData = [
   {
@@ -24,32 +26,19 @@ const faqData = [
 
 const FAQ = () => {
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="page-container container section"
-    >
-      <div className="page-header text-center" style={{ marginBottom: '4rem' }}>
-        <motion.h1 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
+    <div className="page-container container section animate-in fade-in duration-500">
+      <div className="page-header text-center mb-16">
+        <h1 className="animate-in slide-in-from-bottom-4 duration-700">
           Frequently Asked Questions
-        </motion.h1>
+        </h1>
       </div>
       
-      <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-        >
-          <Accordion items={faqData} />
-        </motion.div>
+      <div className="max-w-[800px] mx-auto animate-in slide-in-from-bottom-4 duration-700 delay-200 fill-mode-both">
+        <Accordion items={faqData} />
       </div>
-    </motion.div>
+    </div>
   );
 };
 
 export default FAQ;
+

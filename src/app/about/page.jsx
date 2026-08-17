@@ -1,42 +1,36 @@
-"use client";
+import Image from 'next/image';
 
-import { motion } from 'framer-motion';
+export const metadata = {
+  title: 'About Us | Sagasa',
+  description: 'Learn about Sagasa, our commitment to sustainable practices, and timeless design.',
+};
 
 const About = () => {
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="page-container container section"
-    >
+    <div className="page-container container section animate-in fade-in duration-500">
       <div className="page-header text-center">
-        <motion.h1 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
+        <h1 className="animate-in slide-in-from-bottom-4 duration-700">
           Our Story
-        </motion.h1>
+        </h1>
       </div>
       
-      <div className="content-grid" style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '3rem', marginTop: '3rem' }}>
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-        >
-          <img 
+      <div className="grid grid-cols-1 gap-12 mt-12">
+        <div className="relative w-full aspect-[21/9] rounded-lg overflow-hidden animate-in slide-in-from-bottom-4 duration-700 delay-200 fill-mode-both">
+          <Image 
             src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
             alt="About Sagasa" 
-            style={{ width: '100%', borderRadius: '8px', aspectRatio: '21/9', objectFit: 'cover' }}
+            fill
+            sizes="100vw"
+            className="object-cover"
+            priority
           />
-        </motion.div>
+        </div>
         
-        <div style={{ maxWidth: '800px', margin: '0 auto', fontSize: '1.125rem', color: 'var(--color-text-muted)', lineHeight: '1.8' }}>
-          <p style={{ marginBottom: '1.5rem' }}>
+        <div className="max-w-[800px] mx-auto text-lg text-[var(--color-text-muted)] leading-relaxed space-y-6">
+          <p>
             Founded with a vision to redefine modern minimalism, Sagasa is more than just a clothing brand. We are a lifestyle dedicated to the pursuit of effortless elegance, sustainable practices, and timeless design.
           </p>
-          <p style={{ marginBottom: '1.5rem' }}>
+          <p>
             Every piece in our collection is meticulously crafted to ensure the highest quality. We source our materials from ethical suppliers who share our commitment to environmental responsibility. Our garments are designed to transcend seasons, becoming trusted staples in your wardrobe for years to come.
           </p>
           <p>
@@ -44,7 +38,7 @@ const About = () => {
           </p>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 

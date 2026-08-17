@@ -1,5 +1,3 @@
-"use client";
-
 import Link from 'next/link';
 import Image from 'next/image';
 import { Droplet, Flower2, Heart, ShieldCheck } from 'lucide-react';
@@ -28,22 +26,24 @@ const links = [
 
 const socials = [Instagram, Facebook];
 
-export default function Footer() {
+export default function Footer({ showFeatures = false }) {
   return (
     <footer className="bg-[#FAF9F6] pt-16 pb-8 mt-auto font-[family-name:var(--font-body)] text-[#333]">
       <div className="container mx-auto px-4">
         {/* Features */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16 pb-16 border-b border-[#E5E5E5]">
-          {features.map((f, i) => (
-            <div key={i} className="flex gap-4 items-start">
-              <div className="p-3 border border-[#E5E5E5] rounded-full shrink-0 text-[#8B7A5E]"><f.i size={24} strokeWidth={1.5} /></div>
-              <div className="flex flex-col gap-1">
-                <h4 className="font-bold text-[0.95rem]">{f.t}</h4>
-                <p className="text-[0.8rem] text-[#666] leading-relaxed whitespace-pre-line">{f.d}</p>
+        {showFeatures && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16 pb-16 border-b border-[#E5E5E5]">
+            {features.map((f, i) => (
+              <div key={i} className="flex gap-4 items-start">
+                <div className="p-3 border border-[#E5E5E5] rounded-full shrink-0 text-[#8B7A5E]"><f.i size={24} strokeWidth={1.5} /></div>
+                <div className="flex flex-col gap-1">
+                  <h4 className="font-bold text-[0.95rem]">{f.t}</h4>
+                  <p className="text-[0.8rem] text-[#666] leading-relaxed whitespace-pre-line">{f.d}</p>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
         {/* Newsletter Banner */}
         <div className="bg-[#F5F4F0] rounded-lg p-8 md:p-12 mb-16 flex flex-col md:flex-row justify-between items-center gap-8">
